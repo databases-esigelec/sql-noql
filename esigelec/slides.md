@@ -1480,3 +1480,227 @@ MATCH chemin = (c:Compte)-[:TRANSFERT*3..5]->(c)
 WHERE ALL(r IN relationships(chemin) WHERE r.montant > 10000)
 RETURN chemin
 ```
+
+---
+layout: cover
+---
+
+# Travaux Dirigés
+## SQL et NoSQL en pratique
+
+---
+layout: default
+---
+
+# Organisation du TD
+
+### Durée totale : 4 heures
+- PostgreSQL : 45 minutes
+- MongoDB : 85 minutes
+- Pause: 10 minutes
+- Neo4j : 85 minutes
+- Révisions et questions : 15 minutes
+
+### Objectifs
+- Mettre en pratique les concepts vus en cours
+- Développer des compétences pratiques
+- Comprendre les cas d'usage spécifiques
+- Comparer les approches SQL et NoSQL
+
+---
+layout: default
+---
+
+# TD 1 : PostgreSQL Avancé (45min)
+
+### Exercice 1: Fenêtrage et CTE (15min)
+```sql
+-- Base de données fournie : entreprise
+-- Tables: employes, departements, projets, assignments
+
+-- 1.1 Écrivez une requête utilisant une fenêtre pour:
+--   - Calculer le salaire moyen par département
+--   - Afficher l'écart entre le salaire de chaque employé et la moyenne
+--   - Classer les employés par salaire dans chaque département
+
+-- 1.2 Utilisez une CTE pour:
+--   - Identifier les départements où le salaire moyen est supérieur à la moyenne globale
+--   - Lister les employés de ces départements
+```
+
+### Exercice 2: Requêtes complexes et optimisation (15min)
+```sql
+-- 2.1 Analysez et optimisez la requête suivante:
+SELECT e.nom, d.nom_dept, COUNT(p.id) as nb_projets
+FROM employes e
+LEFT JOIN departements d ON e.dept_id = d.id
+LEFT JOIN assignments a ON e.id = a.employe_id
+LEFT JOIN projets p ON a.projet_id = p.id
+GROUP BY e.nom, d.nom_dept;
+
+-- 2.2 Proposez des index pertinents
+-- 2.3 Utilisez EXPLAIN ANALYZE pour comparer les performances
+```
+
+### Exercice 3: Triggers et fonctions (15min)
+```sql
+-- 3.1 Créez un trigger qui:
+--   - Met à jour la date de dernière modification d'un projet
+--   - Vérifie que le nombre d'employés par projet ne dépasse pas 10
+
+-- 3.2 Créez une fonction qui:
+--   - Calcule le coût total d'un projet
+--   - Prend en compte les salaires et les ressources
+```
+
+---
+layout: default
+---
+
+# TD 2 : MongoDB (90min)
+
+### Exercice 1: E-commerce (30min)
+```javascript
+// Base de données: ecommerce
+// Collections: produits, commandes, clients
+
+// 1.1 Créez les schémas suivants:
+// - Produit (nom, prix, catégorie, stock, fournisseur)
+// - Client (nom, email, adresses[], panier)
+// - Commande (client, produits[], total, statut)
+
+// 1.2 Écrivez les requêtes pour:
+// - Lister les produits par catégorie avec stock < 10
+// - Trouver les clients ayant dépensé plus de 1000€
+// - Calculer le chiffre d'affaires par catégorie
+```
+
+### Exercice 2: Agrégation (30min)
+```javascript
+// 2.1 Pipeline d'agrégation pour:
+// - Analyser les ventes mensuelles
+// - Calculer le panier moyen
+// - Identifier les meilleurs clients
+
+// 2.2 Utiliser $lookup pour:
+// - Joindre les informations clients et commandes
+// - Enrichir les commandes avec détails produits
+```
+
+### Exercice 3: Modélisation et Performance (30min)
+```javascript
+// 3.1 Comparez ces deux modèles:
+// Modèle 1: Documents embarqués
+{
+  client: { ... },
+  produits: [ ... ],
+  adresseLivraison: { ... }
+}
+
+// Modèle 2: Références
+{
+  client_id: "...",
+  produits: ["id1", "id2"],
+  adresse_id: "..."
+}
+
+// 3.2 Créez des index appropriés
+// 3.3 Analysez les performances avec explain()
+```
+
+---
+layout: default
+---
+
+# TD 3 : Neo4j (90min)
+
+### Exercice 1: Réseau Social (30min)
+```cypher
+// Base de données: socialnetwork
+// Nœuds: User, Post, Group
+
+// 1.1 Créez un graphe de test avec:
+// - 10 utilisateurs
+// - Relations d'amitié
+// - Posts et commentaires
+// - Groupes et membres
+
+// 1.2 Requêtes de base:
+// - Trouver les amis communs
+// - Lister les posts d'amis
+// - Identifier les groupes populaires
+```
+
+### Exercice 2: Recommandations (30min)
+```cypher
+// 2.1 Développez des requêtes de recommandation:
+// - Amis suggérés (amis d'amis)
+// - Groupes susceptibles d'intéresser
+// - Posts pertinents
+
+// 2.2 Ajoutez des scores de pertinence:
+// - Basés sur les intérêts communs
+// - Pondérés par l'activité récente
+```
+
+### Exercice 3: Analyse de graphe (30min)
+```cypher
+// 3.1 Requêtes d'analyse:
+// - Calculer la centralité des utilisateurs
+// - Identifier les influenceurs
+// - Détecter les communautés
+
+// 3.2 Performance et optimisation:
+// - Créer des index appropriés
+// - Optimiser les requêtes complexes
+// - Analyser les plans d'exécution
+```
+
+---
+layout: default
+---
+
+# Livrables et Évaluation
+
+### Pour chaque exercice
+- Scripts SQL/NoSQL commentés
+- Justification des choix de modélisation
+- Analyse des performances
+- Suggestions d'optimisation
+
+### Critères d'évaluation
+1. Fonctionnalité (40%)
+   - Requêtes correctes
+   - Résultats attendus
+   - Gestion des erreurs
+
+2. Performance (30%)
+   - Optimisation
+   - Indexation
+   - Choix de modélisation
+
+3. Style et bonnes pratiques (30%)
+   - Code clair et documenté
+   - Respect des conventions
+   - Pertinence des choix techniques
+
+---
+layout: default
+---
+
+# Solutions types et ressources
+
+### Documentation officielle
+- PostgreSQL: postgresql.org/docs/
+- MongoDB: docs.mongodb.com
+- Neo4j: neo4j.com/docs/
+
+### Outils recommandés
+- pgAdmin ou DBeaver pour PostgreSQL
+- MongoDB Compass
+- Neo4j Browser
+
+### Environnement de test
+- Données de test fournies
+- Scripts d'initialisation
+- Configurations recommandées
