@@ -1194,7 +1194,6 @@ layout: two-cols-header
 
 ---
 layout: cover
-<!-- background: './images/neo4j-background.jpg' -->
 ---
 
 # Neo4j
