@@ -1189,3 +1189,293 @@ layout: two-cols-header
 - Documents trop profonds
 - Arrays non bornés
 - Références en cascade
+
+---
+layout: cover
+<!-- background: './images/neo4j-background.jpg' -->
+---
+
+# Neo4j
+## Base de données orientée graphe
+
+---
+layout: default
+---
+
+# Qu'est-ce que Neo4j ?
+
+### Caractéristiques principales
+- Base de données orientée graphe
+- Modélisation naturelle des relations
+- Langage de requête Cypher
+- ACID compliant
+- Très performant pour les données connectées
+
+### Architecture
+- Nœuds (Nodes) ≈ Entités
+- Relations (Relationships) ≈ Connexions
+- Propriétés ≈ Attributs
+- Labels ≈ Types de nœuds
+- Types de relations
+
+---
+layout: two-cols-header
+---
+
+# Structure d'un graphe
+
+::left::
+
+### Éléments de base
+```mermaid
+graph LR
+    A[Personne:Alice] -->|CONNAIT| B[Personne:Bob]
+    B -->|TRAVAILLE_POUR| C[Entreprise:Tech]
+    A -->|AIME| D[Produit:Phone]
+```
+
+### Types de nœuds (Labels)
+- Personne
+- Entreprise
+- Produit
+- Lieu
+- Événement
+
+::right::
+
+### Relations et propriétés
+```cypher
+CREATE (p:Personne {
+  nom: "Alice",
+  age: 30
+})-[r:TRAVAILLE_POUR {
+  depuis: "2020",
+  poste: "Développeur"
+}]->(e:Entreprise {
+  nom: "Tech Corp",
+  secteur: "IT"
+})
+```
+
+---
+layout: two-cols-header
+---
+
+# Langage Cypher
+
+::left::
+
+### Création de nœuds
+```cypher
+// Créer un nœud
+CREATE (p:Personne {
+  nom: "Alice",
+  age: 30
+})
+
+// Créer une relation
+MATCH (a:Personne {nom: "Alice"})
+MATCH (b:Personne {nom: "Bob"})
+CREATE (a)-[r:CONNAIT]->(b)
+```
+
+### Lecture
+```cypher
+// Trouver des nœuds
+MATCH (p:Personne)
+WHERE p.age > 25
+RETURN p
+
+// Avec relations
+MATCH (p:Personne)-[r:TRAVAILLE_POUR]->(e:Entreprise)
+RETURN p, r, e
+```
+
+::right::
+
+### Modification
+```cypher
+// Mettre à jour un nœud
+MATCH (p:Personne {nom: "Alice"})
+SET p.age = 31
+
+// Modifier une relation
+MATCH ()-[r:TRAVAILLE_POUR]->()
+SET r.poste = "Senior Dev"
+```
+
+### Suppression
+```cypher
+// Supprimer un nœud
+MATCH (p:Personne {nom: "Alice"})
+DELETE p
+
+// Supprimer une relation
+MATCH ()-[r:CONNAIT]->()
+DELETE r
+```
+
+---
+layout: default
+---
+
+# Requêtes avancées
+
+### Navigation dans le graphe
+```cypher
+// Chemins de longueur variable
+MATCH (a:Personne {nom: "Alice"})-[*1..3]->(b)
+RETURN b
+
+// Plus court chemin
+MATCH p=shortestPath(
+  (a:Personne)-[*]->(b:Personne)
+)
+WHERE a.nom = "Alice" AND b.nom = "Charlie"
+RETURN p
+```
+
+### Agrégation et patterns complexes
+```cypher
+// Groupement et comptage
+MATCH (p:Personne)-[:TRAVAILLE_POUR]->(e:Entreprise)
+RETURN e.nom, count(p) as nb_employes
+ORDER BY nb_employes DESC
+
+// Pattern complexe
+MATCH (p1:Personne)-[:CONNAIT]->(p2:Personne)-[:TRAVAILLE_POUR]->(e:Entreprise)
+WHERE p1.nom = "Alice" AND e.secteur = "IT"
+RETURN DISTINCT p2.nom as contacts_it
+```
+
+---
+layout: two-cols-header
+---
+
+# Modélisation avec Neo4j
+
+::left::
+
+### Bonnes pratiques
+1. **Labels**
+   - Utilisez des labels multiples
+   - Hiérarchie de labels
+   - Nommage clair
+
+2. **Relations**
+   - Direction significative
+   - Nommage explicite
+   - Propriétés utiles
+
+3. **Propriétés**
+   - Attributs atomiques
+   - Indexation stratégique
+   - Pas de tableaux complexes
+
+::right::
+
+### Patterns communs
+```mermaid
+graph TD
+    A[User] -->|POSTED| B[Post]
+    B -->|TAGGED| C[Topic]
+    A -->|FOLLOWS| A
+    B -->|REPLY_TO| B
+```
+
+### Anti-patterns
+- Relations sans direction
+- Propriétés redondantes
+- Sur-utilisation des labels
+- Relations génériques
+
+---
+layout: two-cols-header
+---
+
+# Indexation et Performances
+
+::left::
+
+### Types d'index
+- Indexes par label/propriété
+- Composite indexes
+- Full-text indexes
+- Range indexes
+
+### Création d'index
+```cypher
+// Index simple
+CREATE INDEX FOR (p:Personne) 
+ON (p.nom)
+
+// Index composé
+CREATE INDEX FOR (p:Personne)
+ON (p.nom, p.age)
+
+// Index full-text
+CREATE FULLTEXT INDEX personneSearch 
+FOR (p:Personne) 
+ON EACH [p.nom, p.description]
+```
+
+::right::
+
+### Optimisation
+1. **Stratégies d'indexation**
+   - Index sur les propriétés filtrées
+   - Index sur les propriétés de jointure
+   - Éviter la sur-indexation
+
+2. **Analyse des performances**
+   ```cypher
+   PROFILE
+   MATCH (p:Personne)-[:CONNAIT]->()
+   RETURN p.nom, count(*) as relations
+   ```
+
+3. **Monitoring**
+   - Utilisation de la mémoire
+   - Temps de réponse
+   - Cache hits/misses
+
+---
+layout: default
+---
+
+# Cas d'utilisation de Neo4j
+
+### Idéal pour
+- Réseaux sociaux
+- Systèmes de recommandation
+- Détection de fraude
+- Graphes de connaissances
+- Gestion des identités
+- Analyse d'impact
+
+### Exemples concrets
+1. **Réseaux sociaux**
+```cypher
+// Trouver les amis des amis
+MATCH (p:Personne {nom:"Alice"})-[:CONNAIT]->(ami)-[:CONNAIT]->(amiDami)
+WHERE NOT (p)-[:CONNAIT]->(amiDami)
+RETURN DISTINCT amiDami.nom as suggestions
+```
+
+2. **Recommandations**
+```cypher
+// Produits fréquemment achetés ensemble
+MATCH (p:Produit)<-[:A_ACHETE]-(c:Client)-[:A_ACHETE]->(autreProduit:Produit)
+WHERE p.id = "123"
+RETURN autreProduit.nom, count(*) as frequence
+ORDER BY frequence DESC
+LIMIT 5
+```
+
+3. **Détection de fraude**
+```cypher
+// Identifier les cycles de transactions suspects
+MATCH chemin = (c:Compte)-[:TRANSFERT*3..5]->(c)
+WHERE ALL(r IN relationships(chemin) WHERE r.montant > 10000)
+RETURN chemin
+```
