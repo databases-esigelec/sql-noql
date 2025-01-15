@@ -1057,18 +1057,6 @@ layout: default
 }
 ```
 
-### Requêtes sur tableaux
-```javascript
-// Recherche dans un tableau
-{ tags: "Premium" }
-
-// Conditions multiples sur tableau
-{ tags: { $all: ["VIP", "Premium"] } }
-
-// Requête sur documents imbriqués
-{ "adresses.ville": "Paris" }
-```
-
 ---
 layout: two-cols-header
 ---
@@ -1080,10 +1068,9 @@ layout: two-cols-header
 ### Types d'index
 - Single Field Index
 - Compound Index
-- Multikey Index (arrays)
 - Text Index
 - Geospatial Index
-- Hashed Index
+- ...
 
 ### Création d'index
 ```javascript
@@ -1138,6 +1125,8 @@ layout: default
 - Besoin de scalabilité horizontale
 - Développement agile
 - Applications temps réel
+
+::right::
 
 ### Exemples concrets
 1. **E-commerce**
