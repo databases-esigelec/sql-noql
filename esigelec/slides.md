@@ -891,3 +891,312 @@ graph TB
     D --> F
     D --> I[CouchDB]
 ```
+
+---
+layout: cover
+---
+
+# MongoDB
+## Une base de données orientée document
+
+---
+layout: default
+---
+
+# Qu'est-ce que MongoDB ?
+
+### Caractéristiques principales
+- Base de données NoSQL orientée document
+- Documents au format BSON (Binary JSON)
+- Schéma flexible et dynamique
+- Scalabilité horizontale native
+- Haute disponibilité avec la réplication
+
+### Architecture
+- Collections ≈ Tables en SQL
+- Documents ≈ Lignes en SQL
+- Champs ≈ Colonnes en SQL
+- Index supportés
+- Pas de jointures natives
+
+---
+layout: two-cols-header
+---
+
+# Structure des données
+
+::left::
+
+### Document BSON
+```json
+{
+  "_id": ObjectId("5f7d3"),
+  "nom": "Dupont",
+  "age": 30,
+  "adresses": [
+    {
+      "type": "domicile",
+      "ville": "Paris",
+      "code_postal": "75001"
+    },
+    {
+      "type": "travail",
+      "ville": "Lyon",
+      "code_postal": "69001"
+    }
+  ],
+  "tags": ["VIP", "Premium"]
+}
+```
+
+::right::
+
+### Types de données
+- Strings
+- Numbers (Integer, Float, Decimal)
+- Dates
+- Boolean
+- Arrays
+- Embedded Documents
+- ObjectId
+- Null
+- Binary Data
+- Regular Expression
+
+---
+layout: two-cols-header
+---
+
+# Opérations CRUD
+
+::left::
+
+### Create
+```javascript
+// Insérer un document
+db.clients.insertOne({
+  nom: "Dupont",
+  age: 30
+})
+
+// Insérer plusieurs documents
+db.clients.insertMany([
+  { nom: "Martin", age: 25 },
+  { nom: "Bernard", age: 35 }
+])
+```
+
+### Read
+```javascript
+// Trouver tous les clients
+db.clients.find()
+
+// Avec filtre
+db.clients.find({
+  age: { $gt: 30 }
+})
+```
+
+::right::
+
+### Update
+```javascript
+// Modifier un document
+db.clients.updateOne(
+  { nom: "Dupont" },
+  { $set: { age: 31 } }
+)
+
+// Modifier plusieurs documents
+db.clients.updateMany(
+  { age: { $lt: 30 } },
+  { $set: { statut: "jeune" } }
+)
+```
+
+### Delete
+```javascript
+// Supprimer un document
+db.clients.deleteOne({
+  nom: "Dupont"
+})
+
+// Supprimer plusieurs documents
+db.clients.deleteMany({
+  age: { $lt: 25 }
+})
+```
+
+---
+layout: default
+---
+
+# Requêtes avancées
+
+### Opérateurs de comparaison
+```javascript
+{
+  age: { $gt: 25 },        // plus grand que
+  prix: { $lte: 100 },     // plus petit ou égal
+  statut: { $ne: "inactif" }, // différent de
+  tags: { $in: ["VIP", "Premium"] } // dans la liste
+}
+```
+
+### Opérateurs logiques
+```javascript
+{
+  $and: [
+    { age: { $gt: 25 } },
+    { ville: "Paris" }
+  ],
+  $or: [
+    { statut: "VIP" },
+    { points: { $gt: 100 } }
+  ]
+}
+```
+
+### Requêtes sur tableaux
+```javascript
+// Recherche dans un tableau
+{ tags: "Premium" }
+
+// Conditions multiples sur tableau
+{ tags: { $all: ["VIP", "Premium"] } }
+
+// Requête sur documents imbriqués
+{ "adresses.ville": "Paris" }
+```
+
+---
+layout: two-cols-header
+---
+
+# Indexation avec MongoDB
+
+::left::
+
+### Types d'index
+- Single Field Index
+- Compound Index
+- Multikey Index (arrays)
+- Text Index
+- Geospatial Index
+- Hashed Index
+
+### Création d'index
+```javascript
+// Index simple
+db.clients.createIndex({ nom: 1 })
+
+// Index composé
+db.clients.createIndex(
+  { ville: 1, age: -1 }
+)
+
+// Index unique
+db.clients.createIndex(
+  { email: 1 },
+  { unique: true }
+)
+```
+
+::right::
+
+### Bonnes pratiques
+- Index sur les champs fréquemment recherchés
+- Attention aux index composés : ordre important
+- Éviter la sur-indexation
+- Utiliser explain() pour analyser
+- Index en arrière-plan pour la production
+
+### Analyse des index
+```javascript
+// Analyser une requête
+db.clients.find({ 
+  ville: "Paris" 
+}).explain("executionStats")
+
+// Liste des index
+db.clients.getIndexes()
+
+// Statistiques d'index
+db.clients.stats()
+```
+
+---
+layout: default
+---
+
+# Cas d'utilisation de MongoDB
+
+### Idéal pour
+- Applications web modernes
+- Contenu varié et évolutif
+- Données semi-structurées
+- Besoin de scalabilité horizontale
+- Développement agile
+- Applications temps réel
+
+### Exemples concrets
+1. **E-commerce**
+   - Catalogues de produits
+   - Paniers utilisateurs
+   - Historique des commandes
+
+2. **Applications mobiles**
+   - Profils utilisateurs
+   - Contenu généré par les utilisateurs
+   - Données de géolocalisation
+
+3. **Analytics**
+   - Logs d'événements
+   - Données IoT
+   - Métriques en temps réel
+
+---
+layout: two-cols-header
+---
+
+# Modélisation des données
+
+::left::
+
+### Patterns de conception
+- Embedded Documents
+```javascript
+{
+  _id: 1,
+  item: "Xbox Series X",
+  manufacturer: {
+    name: "Microsoft",
+    address: "Redmond, WA",
+    phone: "123-456-7890"
+  }
+}
+```
+
+- References
+```javascript
+{
+  _id: 1,
+  item: "Xbox Series X",
+  manufacturer_id: 123
+}
+```
+
+::right::
+
+### Bonnes pratiques
+- Privilégier l'embedding pour les relations 1:1
+- Utiliser les références pour les relations N:M
+- Dénormaliser stratégiquement
+- Limiter la taille des documents
+- Concevoir pour les cas d'utilisation
+
+### Anti-patterns
+- Jointures côté application excessive
+- Documents trop profonds
+- Arrays non bornés
+- Références en cascade
