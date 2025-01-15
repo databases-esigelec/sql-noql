@@ -1113,7 +1113,7 @@ db.clients.stats()
 ```
 
 ---
-layout: default
+layout: two-cols-header
 ---
 
 # Cas d'utilisation de MongoDB
@@ -1128,9 +1128,7 @@ layout: default
 - Développement agile
 - Applications temps réel
 
-
 ::right::
-
 
 ### Exemples concrets
 1. **E-commerce**
