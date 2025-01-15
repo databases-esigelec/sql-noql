@@ -19,19 +19,34 @@ layout: default
 
 # Plan du module
 
-- **Cours Magistral** (1 journée)
-  - Révision et approfondissement SQL
-  - Introduction et concepts NoSQL
+- **Cours Magistral** (1 journée - 8h)
+  - SQL Avancé - 3h
+    - Rappel des fondamentaux - 30 min
+      -  2 exercices + 1 mini-challenge - 20 min
+    - Optimisation(indexation, analyse) - 45 min
+      - 1 exercice + 1 mini-challenge - 15 min
+    - Pause - 10 min
+    - Requêtes complexes(Fenetrage, CTEs, Joins) - 45 min
+      - 2 exercices + 1 mini-challenge - 15 min
+  - NoSQL - 5h
+    - Introduction et concepts - 1h
+      - 1 exercice + 1 mini-challenge - 10 min
+    - MongoDB - 1h30
+      - 2 exercice + 1 mini-challenge - 15 min
+    - Neo4j - 1h30
+      - 2 exercice + 1 mini-challenge - 15 min
 
-- **TD** (1/2 journée)
-  - Exercices pratiques SQL et NoSQL
+
+- **TD** (1/2 journée - 4h)
+  - Travaux dirigés SQL - 1h - 2 exercices guidés
+  - Travaux dirigés NoSQL - 3h - 4 à 6 exercices guidés
   
-- **TP** (3.5 demi-journées)
-  - Implémentation pratique
+- **TP** (2 journées - 16h)
+  - Projet fil rouge - PostgreSQL/MongoDB/Neo4j
   - Cas réels d'utilisation
 
 - **Évaluation**
-  - 2 sessions de contrôle
+  - 1 contrôle
 
 ---
 layout: two-cols-header
@@ -87,6 +102,23 @@ layout: default
   - Schema prédéfini
   - Relations entre tables
   - ACID (Atomicité, Cohérence, Isolation, Durabilité)
+
+
+---
+layout: default
+---
+
+# Exercice 1: Structure relationnelle
+
+**Question**: Identifiez les éléments d'une base de données relationnelle dans l'exemple suivant:
+
+```sql
+Clients (
+    ClientID: 1,
+    Nom: "Martin",  
+    Email: "martin@email.com"
+)
+```
 
 ---
 layout: two-cols-header
