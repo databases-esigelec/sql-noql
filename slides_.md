@@ -280,3 +280,90 @@ layout: end
 # Merci !
 
 [Documentation MongoDB](https://docs.mongodb.com) · [Documentation Neo4j](https://neo4j.com/docs/)
+
+
+
+Je vais t'aider à ajouter des exercices pratiques pour chaque section. Voici mes suggestions:
+
+Après la section "Le modèle relationnel":
+
+```markdown
+---
+layout: default
+---
+
+# Exercice 1: Structure relationnelle
+
+**Question**: Identifiez les éléments d'une base de données relationnelle dans l'exemple suivant:
+
+```sql
+Clients (
+    ClientID: 1,
+    Nom: "Martin",  
+    Email: "martin@email.com"
+)
+```
+
+- [ ] Table: _______
+- [ ] Attributs: _______, _______, _______
+- [ ] Tuple: _______
+
+*Réponses*: Table: Clients, Attributs: ClientID, Nom, Email, Tuple: (1, "Martin", "martin@email.com")
+```
+
+Après la section "Schémas et tables":
+
+```markdown
+---
+layout: default
+---
+
+# Exercice 2: Création de tables
+
+**Complétez la requête SQL suivante pour créer une table "Produits" avec:**
+- Un identifiant (entier, clé primaire)
+- Un nom (chaîne de 100 caractères, non null)
+- Un prix (décimal avec 2 décimales)
+- Une catégorie (chaîne de 50 caractères)
+
+```sql
+CREATE TABLE _______  (
+    _______ INT _______,
+    _______ VARCHAR(100) _______,
+    _______ DECIMAL(10,2),
+    _______ VARCHAR(50)
+);
+```
+```
+
+Pour la section "Normalisation":
+
+```markdown
+---
+layout: default
+---
+
+# Exercice 3: Identifier la forme normale
+
+**QCM**: Quelle forme normale est violée dans la table suivante ?
+
+```sql
+Commandes(
+    commande_id,
+    client_nom,
+    client_adresse,
+    produit_nom,
+    produit_prix,
+    quantité
+)
+```
+
+- [ ] 1NF - Toutes les valeurs sont atomiques
+- [ ] 2NF - Les attributs dépendent de toute la clé
+- [ ] 3NF - Pas de dépendances transitives
+- [ ] Aucune violation
+
+*Indice*: Observez les dépendances entre les colonnes liées aux clients et aux produits.
+```
+
+Ces exercices permettent aux étudiants de mettre en pratique les concepts théoriques tout en restant dans le format de présentation slidev. Voulez-vous que je continue avec les autres sections?
