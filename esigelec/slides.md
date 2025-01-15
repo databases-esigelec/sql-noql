@@ -1118,6 +1118,8 @@ layout: default
 
 # Cas d'utilisation de MongoDB
 
+::left::
+
 ### Idéal pour
 - Applications web modernes
 - Contenu varié et évolutif
