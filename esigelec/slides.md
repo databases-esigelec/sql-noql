@@ -1126,7 +1126,9 @@ layout: default
 - Développement agile
 - Applications temps réel
 
+
 ::right::
+
 
 ### Exemples concrets
 1. **E-commerce**
