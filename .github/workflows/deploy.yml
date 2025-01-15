@@ -38,7 +38,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
+      - name: check build
+        run: ls -lar
 
       - uses: actions/upload-pages-artifact@v3
         with:
