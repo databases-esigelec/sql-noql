@@ -30,16 +30,19 @@ jobs:
 
       - name: Install dependencies
         run: nci
+        working-directory: esigelec
 
       - name: Build
-        run: nr build --base /${{github.event.repository.name}}/esigelec
+        run: nr build --base /${{github.event.repository.name}}
+        working-directory: esigelec
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: esigelec/dist
 
   deploy:
     environment:
