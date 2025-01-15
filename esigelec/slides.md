@@ -28,6 +28,7 @@ layout: default
     - Pause - 10 min
     - Requêtes complexes(Fenetrage, CTEs, Joins) - 45 min
       - 2 exercices + 1 mini-challenge - 15 min
+    - ORM python(SQLAlchemy)
   - NoSQL - 5h
     - Introduction et concepts - 1h
       - 1 exercice + 1 mini-challenge - 10 min
@@ -83,7 +84,7 @@ layout: cover
 background: './images/sql-background.jpg'
 ---
 
-# Révision SQL
+# SQL Avancé
 ## Les fondamentaux
 
 ---
@@ -108,17 +109,6 @@ layout: default
 layout: default
 ---
 
-# Exercice 1: Structure relationnelle
-
-**Question**: Identifiez les éléments d'une base de données relationnelle dans l'exemple suivant:
-
-```sql
-Clients (
-    ClientID: 1,
-    Nom: "Martin",  
-    Email: "martin@email.com"
-)
-```
 
 ---
 layout: two-cols-header
@@ -156,6 +146,42 @@ CREATE TABLE Commandes (
   - Données cohérentes
   - Intégrité référentielle
   - Requêtes complexes
+
+---
+layout: two-cols-header
+---
+
+# Exercice: Création de tables
+::left::
+**Complétez la requête SQL suivante pour créer une table "Produits" avec:**
+- Un identifiant (entier, clé primaire)
+- Un nom (chaîne de 100 caractères, non null)
+- Un prix (décimal avec 2 décimales)
+- Une catégorie (chaîne de 50 caractères)
+
+```sql
+CREATE TABLE _______  (
+    _______ INT _______,
+    _______ VARCHAR(100) _______,
+    _______ DECIMAL(10,2),
+    _______ VARCHAR(50)
+);
+```
+::right::
+<v-click>
+
+**Réponse:**
+```sql
+CREATE TABLE Produits (
+    id INT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prix DECIMAL(10,2),
+    categorie VARCHAR(50)
+);
+
+```
+</v-click>
+
 ---
 layout: default
 ---
@@ -294,9 +320,13 @@ layout: two-cols-header
 # Types de relations
 
 ::left::
+- **One-to-One(1:1)**
+- One-to-Many(1:N)
+- Many-to-Many(N:M)
 
+::right::
 
-**One-to-One (1:1)**
+<!-- **One-to-One (1:1)** -->
 ```sql {}{class:'!children:text-xs'}
 CREATE TABLE Utilisateur (
     id INT PRIMARY KEY,
@@ -318,8 +348,12 @@ layout: two-cols-header
 
 # Types de relations
 ::left::
+- One-to-One(1:1)
+- **One-to-Many(1:N)**
+- Many-to-Many(N:M)
 
-### One-to-Many (1:N)
+::right::
+
 ```sql
 CREATE TABLE Auteur (
     id INT PRIMARY KEY,
@@ -341,8 +375,12 @@ layout: two-cols-header
 
 # Types de relations
 ::left::
+- One-to-One(1:1)
+- One-to-Many(1:N)
+- **Many-to-Many(N:M)**
 
-### Many-to-Many (N:M)
+::right::
+
 ```sql
 CREATE TABLE Etudiant (
     id INT PRIMARY KEY,
@@ -394,6 +432,7 @@ layout: two-cols-header
 
 ::right::
 
+### Exemples d'indexations
 ```sql
 -- Index B-tree simple
 CREATE INDEX idx_nom 
@@ -510,31 +549,66 @@ WITH emp_stats AS (
     GROUP BY departement
 )
 SELECT * FROM emp_stats
-WHERE nb_employes > 10;
+WHERE nb_employes > 3;
 ```
+
+---
+layout: two-cols-header
+---
+
+# Common Table Expressions (CTE)
+
+::left::
+<div class="mr-6">
+
+**Version sans CTE**
+```sql
+
+-- Sous-requêtes répétitives
+SELECT 
+    c.nom,
+    (SELECT COUNT(*) 
+     FROM commandes 
+     WHERE client_id = c.id) as nb_commandes,
+    (SELECT SUM(montant) 
+     FROM commandes 
+     WHERE client_id = c.id) as total,
+    (SELECT AVG(montant) 
+     FROM commandes 
+     WHERE client_id = c.id) as panier_moyen
+FROM clients c
+WHERE (SELECT SUM(montant) 
+       FROM commandes 
+       WHERE client_id = c.id) > 300;
+```
+</div>
 
 ::right::
+<v-click>
 
-### CTE Récursive
-
+**Version avec CTE**
 ```sql
-WITH RECURSIVE hierarchie AS (
-    -- Cas de base
-    SELECT id, nom, manager_id, 1 as niveau
-    FROM employes
-    WHERE manager_id IS NULL
-    
-    UNION ALL
-    
-    -- Partie récursive
-    SELECT e.id, e.nom, e.manager_id, 
-           h.niveau + 1
-    FROM employes e
-    JOIN hierarchie h 
-        ON e.manager_id = h.id
+-- Plus claire
+WITH stats_clients AS (
+    SELECT 
+        client_id,
+        COUNT(*) as nb_commandes,
+        SUM(montant) as total,
+        AVG(montant) as panier_moyen
+    FROM commandes
+    GROUP BY client_id
 )
-SELECT * FROM hierarchie;
+
+SELECT 
+    c.nom,
+    s.nb_commandes,
+    s.total,
+    s.panier_moyen
+FROM clients c
+JOIN stats_clients s ON c.id = s.client_id
+WHERE s.total > 300;
 ```
+</v-click>
 
 ---
 layout: two-cols-header
@@ -581,14 +655,18 @@ FROM departements d;
 layout: default
 ---
 
-# Exercices pratiques
+# Exercice: Optimisation de reqûete
 
 ### 1. Optimisation d'une requête complexe
-```sql
+```sql 
 /* Avant optimisation */
 SELECT * FROM employes 
 WHERE departement IN (SELECT departement FROM employes GROUP BY departement HAVING COUNT(*) > 10);
+```
 
+<v-click>
+
+```sql
 /* Après optimisation */
 WITH grands_dept AS (
     SELECT departement 
@@ -599,7 +677,10 @@ WITH grands_dept AS (
 SELECT e.* 
 FROM employes e
 JOIN grands_dept g ON e.departement = g.departement;
+
 ```
+</v-click>
+
 
 ### 2. Analyse et amélioration des performances
 - Identifiez les goulots d'étranglement
@@ -781,18 +862,43 @@ CREATE (u)-[:AUTHORED]->(p)
 layout: two-cols-header
 ---
 
-# Modélisation NoSQL
+# Caractéristiques NoSQL
 
 ::left::
 
 <div class="mb-4">
 
-### Principes clés
+### Cloud et coûts
+- Utilisent des architecture Cloud
+- Très souvent Pay as you go
+- Licences gratuites car Open Source
+
+### Open Source
+- Open source, donc facilement modifiable et extensible.
+- Contributeurs et communautés très actives
+
+
+### Flexibilité
+- Modélisation à l'écriture
+- Pas de schéma prédéfini
 - Dénormalisation acceptée
-- Pas de schéma fixe
-- Données imbriquées
-- Optimisé pour les lectures
-- Duplication stratégique
+- Attention celà n'exclue pas une modélisation rigoureuse
+
+</div>
+
+::right::
+
+<div class="col-md-6">
+
+
+### Scalabilité
+- Support pour des données volumineuses
+- Capacité à scaler horizontalement(sauf Graphes)
+
+### Disponibilité
+- Tolérant aux interruptions de réseau
+- Assure la continuité de service
+
 
 </div>
 
@@ -807,30 +913,8 @@ layout: two-cols-header
 
 </div>
 
-::right::
 
-```javascript
-// Document MongoDB
-{
-  "_id": "commande123",
-  "client": {
-    "id": "client456",
-    "nom": "Dupont",
-    "email": "dupont@mail.com"
-  },
-  "produits": [
-    {
-      "id": "prod789",
-      "nom": "Laptop",
-      "prix": 999.99,
-      "quantite": 1
-    }
-  ],
-  "total": 999.99,
-  "statut": "en cours",
-  "date": "2024-01-21"
-}
-```
+
 
 ---
 layout: default
