@@ -30,11 +30,11 @@ jobs:
 
       - name: Install dependencies
         run: nci
-        working-directory: esigelec
+        working-directory: courses/slides
 
       - name: Build
         run: nr build --base /${{github.event.repository.name}}
-        working-directory: esigelec
+        working-directory: courses/slides
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -44,7 +44,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: esigelec/dist
+          path: courses/slides/dist
 
   deploy:
     environment:
