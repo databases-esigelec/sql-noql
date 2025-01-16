@@ -326,41 +326,7 @@ CREATE TABLE Inscription (
 layout: two-cols-header
 ---
 
-# **Exercice:** Création de tables
-::left::
-**Complétez la requête SQL suivante pour créer une table "Produits" avec:**
-- Un identifiant (entier, clé primaire)
-- Un nom (chaîne de 100 caractères, non null)
-- Un prix (décimal avec 2 décimales)
-- Une catégorie (chaîne de 50 caractères)
-
-```sql
-CREATE TABLE _______  (
-    _______ INT _______,
-    _______ VARCHAR(100) _______,
-    _______ DECIMAL(10,2),
-    _______ VARCHAR(50)
-);
-```
-::right::
-<v-click>
-
-**Réponse:**
-```sql
-CREATE TABLE Produits (
-    id INT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    prix DECIMAL(10,2),
-    categorie VARCHAR(50)
-);
-
-```
-</v-click>
----
-layout: two-cols-header
----
-
-# **Exercice:** Normalisation
+# **Exemple:** Normalisation
 
 ::left::
 
@@ -421,7 +387,6 @@ background: https://source.unsplash.com/collection/94734566/1920x1080
 ---
 
 # SQL - Requêtes avancées
-
 
 ## Requêtes avancées (du simple au complexe)
 
