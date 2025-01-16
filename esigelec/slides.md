@@ -2143,13 +2143,35 @@ layout: cover
 ## Base de données orientée graphe
 
 ---
+layout: two-cols-header
+# image: '/images/ponts.png'
+---
+# Le problème des 7 ponts
+
+::left::
+
+**Ponts de Koenigsberg**
+
+<div class="mr-4 mt-6">
+<img src="/images/ponts.png"/>
+</div>
+
+::right::
+
+**Vue simplifiée**
+
+<div class="mr-4 mt-6">
+  <img src="/images/ponts-simple.png"/>
+</div>
+
+
+---
 layout: default
 ---
 
 # Qu'est-ce que Neo4j ?
 
-<!-- ![alt text](image.png) -->
-<!-- <img src="./images/pont.png"/> -->
+
 
 
 ### Caractéristiques principales
