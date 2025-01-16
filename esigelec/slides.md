@@ -81,7 +81,7 @@ graph TD
 
 ---
 layout: cover
-background: './images/sql-background.jpg'
+# background: './images/sql-background.jpg'
 ---
 
 # SQL - Fondamentaux
@@ -2136,7 +2136,7 @@ layout: two-cols-header
 
 ---
 layout: cover
-background: './images/pont.png'
+# background: './images/pont.png'
 ---
 
 # Neo4j
@@ -2149,7 +2149,7 @@ layout: default
 # Qu'est-ce que Neo4j ?
 
 <!-- ![alt text](image.png) -->
-<img src="./images/pont.png"/>
+<!-- <img src="./images/pont.png"/> -->
 
 
 ### Caractéristiques principales
