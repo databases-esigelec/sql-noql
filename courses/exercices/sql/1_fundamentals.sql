@@ -26,17 +26,3 @@ INSERT INTO livres (id_livre, titre, id_auteur, annee_publication, genre) VALUES
 (4, 'Notre-Dame de Paris', 1, 1831, 'Roman'),
 (5, 'La Peste', 2, 1947, 'Roman');
 
--- Question 1
--- Écrivez une requête SQL pour obtenir la liste de tous les livres avec le nom et prénom de leurs auteurs.
-
-SELECT l.titre, a.nom, a.prenom
-FROM livres l
-JOIN auteurs a ON l.id_auteur = a.id_auteur;
-
--- Question 2
--- Écrivez une requête SQL pour trouver tous les livres publiés avant 1900, triés par année de publication.
-
-SELECT titre, annee_publication
-FROM livres
-WHERE annee_publication < 1900
-ORDER BY annee_publication;

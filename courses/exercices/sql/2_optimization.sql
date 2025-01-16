@@ -31,17 +31,3 @@ INSERT INTO employes (id, nom, departement, salaire) VALUES
 (14, 'Martinez Jean', 'RH', 51000.00),
 (15, 'Lopez Anna', 'RH', 48000.00);
 
-
---- Requête à optimiser
-SELECT * FROM employes 
-WHERE departement IN (SELECT departement FROM employes GROUP BY departement HAVING COUNT(*) > 2);
---- Version optimisée avec CTE
-WITH grands_dept AS (
-    SELECT departement 
-    FROM employes 
-    GROUP BY departement 
-    HAVING COUNT(*) > 10
-)
-SELECT e.* 
-FROM employes e
-JOIN grands_dept g ON e.departement = g.departement;
