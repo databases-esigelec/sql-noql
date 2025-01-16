@@ -85,7 +85,7 @@ background: './images/sql-background.jpg'
 ---
 
 # SQL Avancé
-## Les fondamentaux
+## Rappel des fondamentaux
 
 ---
 layout: default
@@ -104,10 +104,6 @@ layout: default
   - Relations entre tables
   - ACID (Atomicité, Cohérence, Isolation, Durabilité)
 
-
----
-layout: default
----
 
 
 ---
@@ -147,110 +143,30 @@ CREATE TABLE Commandes (
   - Intégrité référentielle
   - Requêtes complexes
 
+
 ---
 layout: two-cols-header
 ---
 
-# Exercice: Création de tables
-::left::
-**Complétez la requête SQL suivante pour créer une table "Produits" avec:**
-- Un identifiant (entier, clé primaire)
-- Un nom (chaîne de 100 caractères, non null)
-- Un prix (décimal avec 2 décimales)
-- Une catégorie (chaîne de 50 caractères)
-
-```sql
-CREATE TABLE _______  (
-    _______ INT _______,
-    _______ VARCHAR(100) _______,
-    _______ DECIMAL(10,2),
-    _______ VARCHAR(50)
-);
-```
-::right::
-<v-click>
-
-**Réponse:**
-```sql
-CREATE TABLE Produits (
-    id INT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    prix DECIMAL(10,2),
-    categorie VARCHAR(50)
-);
-
-```
-</v-click>
-
----
-layout: default
----
-
 # Normalisation
+
+::left::
 
 ### Pourquoi normaliser ?
 - Éviter la redondance
 - Maintenir l'intégrité
 - Faciliter la maintenance
 
+<br>
+<br>
+<br>
+
 ### Les formes normales principales
 1. **1NF**: Valeurs atomiques
 2. **2NF**: Dépendances fonctionnelles
 3. **3NF**: Pas de dépendances transitives
 
----
-layout: two-cols-header
----
-
-# Exemple de normalisation
-
-::left::
-
-<div class="mb-4 mr-2">
-
-### Table non normalisée
-```sql
-Commandes(
-    id,
-    client_nom,
-    client_email,
-    produits[],
-    total
-)
-```
-</div>
-
-<div class="mb-4 mr-2">
-
-### Tables normalisées (3NF)
-```sql
-Clients(
-    id,
-    nom,
-    email
-)
-
-Commandes(
-    id,
-    client_id,
-    total
-)
-```
-</div>
-
 ::right::
-
-<div class="mb-6">
-
-### Table de liaison
-```sql
-Produits_Commande(
-    commande_id,
-    produit_id,
-    quantite
-)
-```
-</div>
 
 <div class="mb-4">
 
@@ -259,11 +175,15 @@ Produits_Commande(
 - Mise à jour simplifiée
 - Meilleure intégrité
 
-</div>
+<br>
+<br>
+<br>
+
 
 ### Compromis
 - Jointures nécessaires
 - Requêtes plus complexes
+</div>
 
 
 ---
@@ -323,6 +243,7 @@ layout: two-cols-header
 - **One-to-One(1:1)**
 - One-to-Many(1:N)
 - Many-to-Many(N:M)
+
 
 ::right::
 
@@ -401,6 +322,98 @@ CREATE TABLE Inscription (
     FOREIGN KEY (cours_id) REFERENCES Cours(id)
 );
 ```
+---
+layout: two-cols-header
+---
+
+# **Exercice:** Création de tables
+::left::
+**Complétez la requête SQL suivante pour créer une table "Produits" avec:**
+- Un identifiant (entier, clé primaire)
+- Un nom (chaîne de 100 caractères, non null)
+- Un prix (décimal avec 2 décimales)
+- Une catégorie (chaîne de 50 caractères)
+
+```sql
+CREATE TABLE _______  (
+    _______ INT _______,
+    _______ VARCHAR(100) _______,
+    _______ DECIMAL(10,2),
+    _______ VARCHAR(50)
+);
+```
+::right::
+<v-click>
+
+**Réponse:**
+```sql
+CREATE TABLE Produits (
+    id INT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prix DECIMAL(10,2),
+    categorie VARCHAR(50)
+);
+
+```
+</v-click>
+---
+layout: two-cols-header
+---
+
+# **Exercice:** Normalisation
+
+::left::
+
+<div class="mb-4 mr-2">
+
+### Table non normalisée
+Données de commandes dans une seule table
+```sql
+Commandes(
+    id,
+    client_nom,
+    client_email,
+    produit,
+    montant
+)
+```
+
+
+</div>
+
+::right::
+
+<v-click>
+<div class="mb-4 mr-2">
+
+### Tables normalisées (3NF)
+Décomposition en 3 tables atomiques
+```sql
+Clients(id_client, nom, email)
+Produits(id_produit, nom, prix)
+Commandes(id_commande, id_client, date)
+```
+</div>
+
+
+<div class="mb-6">
+
+### Table de liaison
+Création d'un table de liaison
+```sql
+Produits_Commande(
+    id_commande,
+    id_produit,
+    quantite
+)
+
+Commandes <---> Details_Commande <---> Produits
+(1,n)          (table de liaison)     (1,n)
+
+```
+</div>
+
+</v-click>
 
 ---
 layout: cover
@@ -474,7 +487,7 @@ WHERE e.salaire > 50000;
 
 ::right::
 
-<div class="mb-4">
+<div class="mb-4 ml-4">
 
 ### Optimisations courantes
 - Choix des index
@@ -484,7 +497,7 @@ WHERE e.salaire > 50000;
 
 </div>
 
-<div>
+<div class="mb-4 ml-4">
 
 ### Indicateurs
 - Sequential scan vs Index scan
