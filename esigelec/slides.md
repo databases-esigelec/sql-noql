@@ -84,7 +84,7 @@ layout: cover
 background: './images/sql-background.jpg'
 ---
 
-# SQL Avancé
+# SQL - Fondamentaux
 ## Rappel des fondamentaux
 
 ---
@@ -420,8 +420,821 @@ layout: cover
 background: https://source.unsplash.com/collection/94734566/1920x1080
 ---
 
-# SQL Avancé
-## Optimisation et requêtes complexes
+# SQL - Requêtes avancées
+
+
+## Requêtes avancées (du simple au complexe)
+
+---
+layout: two-cols-header
+---
+
+# CASE WHEN et expressions conditionnelles
+
+::left::
+
+### Utilisation de CASE WHEN
+- Expression conditionnelle
+- Multiple conditions
+- Résultats dynamiques
+
+::right::
+
+```sql
+SELECT 
+    nom,
+    salaire,
+    CASE 
+        WHEN salaire < 30000 THEN 'Junior'
+        WHEN salaire < 50000 THEN 'Confirmé'
+        ELSE 'Senior'
+    END as niveau
+FROM employes;
+```
+
+---
+layout: two-cols-header
+---
+
+# Sous-requêtes
+
+::left::
+
+### Types de sous-requêtes
+- Non corrélées (indépendantes)
+- Corrélées (dépendantes)
+- Dans SELECT, FROM, WHERE
+
+::right::
+
+```sql
+-- Sous-requête non corrélée
+SELECT nom 
+FROM employes
+WHERE departement_id IN (
+    SELECT id 
+    FROM departements 
+    WHERE budget > 100000
+);
+
+-- Sous-requête corrélée
+SELECT nom 
+FROM employes e
+WHERE salaire > (
+    SELECT AVG(salaire)
+    FROM employes
+    WHERE departement_id = e.departement_id
+);
+```
+
+---
+layout: two-cols-header
+---
+
+# Opérateurs de sous-requêtes
+
+::left::
+
+### Principaux opérateurs
+- EXISTS / NOT EXISTS
+- IN / NOT IN
+- ANY / ALL
+- SOME
+
+::right::
+
+```sql
+-- EXISTS
+SELECT nom 
+FROM departements d
+WHERE EXISTS (
+    SELECT 1 
+    FROM employes
+    WHERE departement_id = d.id 
+    AND salaire > 50000
+);
+
+-- ANY/ALL
+SELECT nom 
+FROM employes
+WHERE salaire > ALL (
+    SELECT AVG(salaire)
+    FROM employes
+    GROUP BY departement_id
+);
+```
+
+---
+layout: cover
+---
+
+# SQL - Analyse de données
+## Techniques d'analyse de données
+
+---
+layout: two-cols-header
+---
+
+# Introduction aux Window Functions
+
+::left::
+
+### Qu'est-ce qu'une fonction de fenêtrage ?
+- Calculs sur un ensemble de lignes
+- Pas de regroupement des résultats
+- Garde le détail des lignes
+- Permet l'analyse par "fenêtre"
+
+### Syntaxe de base
+```sql
+SELECT colonne,
+    fonction_window() OVER (
+        PARTITION BY colonne1 
+        ORDER BY colonne2
+    )
+FROM table;
+```
+
+::right::
+
+<div class='ml-6'>
+
+### Exemple simple
+```sql
+SELECT 
+    nom,
+    departement,
+    salaire,
+    AVG(salaire) OVER (
+        PARTITION BY departement
+    ) as moyenne_dept
+FROM employes;
+```
+</div>
+
+---
+layout: two-cols-header
+---
+
+# PARTITION BY et ORDER BY
+
+::left::
+
+### PARTITION BY
+- Divise les données en partitions
+- Similaire à GROUP BY
+- Garde toutes les lignes
+- Calculs par partition
+
+### ORDER BY
+- Ordonne les lignes dans la partition
+- Influence les fonctions
+- Définit le "cadre" de calcul
+
+::right::
+
+```sql
+SELECT 
+    nom,
+    departement,
+    date_embauche,
+    salaire,
+    SUM(salaire) OVER (
+        PARTITION BY departement
+        ORDER BY date_embauche
+        ROWS BETWEEN UNBOUNDED PRECEDING 
+            AND CURRENT ROW
+    ) as cumul_salaires
+FROM employes;
+```
+
+---
+layout: two-cols-header
+---
+
+# Fonctions de classement
+
+::left::
+
+### Types de classement
+- **ROW_NUMBER()**
+  * Numéro unique 
+  * Pas de doublons
+
+- **RANK()**
+  * Même rang si égalité
+  * Sauts dans la séquence
+
+- **DENSE_RANK()**
+  * Même rang si égalité
+  * Pas de sauts
+
+::right::
+
+```sql
+SELECT 
+    nom,
+    salaire,
+    ROW_NUMBER() OVER (
+        ORDER BY salaire DESC
+    ) as num,
+    RANK() OVER (
+        ORDER BY salaire DESC
+    ) as rang,
+    DENSE_RANK() OVER (
+        ORDER BY salaire DESC
+    ) as rang_dense
+FROM employes;
+```
+
+---
+layout: two-cols-header
+---
+
+# Fonctions d'agrégation avec OVER
+
+::left::
+
+### Fonctions disponibles
+- SUM()
+- AVG()
+- COUNT()
+- MIN()
+- MAX()
+
+### Utilisation
+- Par partition
+- Cumul
+- Moyenne mobile
+
+::right::
+
+```sql
+SELECT 
+    date_vente,
+    montant,
+    SUM(montant) OVER (
+        ORDER BY date_vente
+        ROWS BETWEEN 3 PRECEDING 
+            AND CURRENT ROW
+    ) as moyenne_mobile_4j,
+    COUNT(*) OVER (
+        PARTITION BY EXTRACT(MONTH FROM date_vente)
+    ) as ventes_du_mois
+FROM ventes;
+```
+
+---
+layout: two-cols-header
+---
+
+# Fonctions LAG, LEAD, FIRST_VALUE, LAST_VALUE
+
+::left::
+
+### Navigation entre lignes
+- LAG(): valeur précédente
+- LEAD(): valeur suivante
+- FIRST_VALUE(): première valeur
+- LAST_VALUE(): dernière valeur
+
+### Applications
+- Comparaison avec période précédente
+- Analyse de tendances
+- Calcul de variations
+
+::right::
+
+```sql
+SELECT 
+    date_vente,
+    montant,
+    LAG(montant) OVER (
+        ORDER BY date_vente
+    ) as montant_precedent,
+    LEAD(montant) OVER (
+        ORDER BY date_vente
+    ) as montant_suivant,
+    montant - LAG(montant) OVER (
+        ORDER BY date_vente
+    ) as variation
+FROM ventes;
+```
+
+
+
+---
+layout: cover
+---
+
+# SQL - CTEs et Récursion
+## Requêtes hiérarchiques et CTEs
+
+---
+layout: two-cols-header
+---
+
+# Common Table Expressions (CTE)
+
+::left::
+
+### Qu'est-ce qu'une CTE ?
+- Table temporaire nommée
+- Valable pour une seule requête
+- Améliore la lisibilité
+- Permet la récursivité
+
+### Avantages
+- Code plus modulaire
+- Réutilisation dans la même requête
+- Alternative aux sous-requêtes
+- Plus facile à maintenir
+
+::right::
+
+```sql
+WITH ventes_dept AS (
+    SELECT 
+        departement,
+        SUM(montant) as total_ventes,
+        COUNT(*) as nb_ventes
+    FROM ventes
+    GROUP BY departement
+),
+stats_dept AS (
+    SELECT 
+        departement,
+        total_ventes / nb_ventes as panier_moyen
+    FROM ventes_dept
+)
+SELECT * FROM stats_dept
+WHERE panier_moyen > 1000;
+```
+
+---
+layout: two-cols-header
+---
+
+# CTEs vs Sous-requêtes
+
+::left::
+
+### Sous-requêtes
+```sql
+SELECT 
+    nom,
+    (SELECT COUNT(*) 
+     FROM commandes 
+     WHERE client_id = c.id) as nb_commandes,
+    (SELECT SUM(montant) 
+     FROM commandes 
+     WHERE client_id = c.id) as total
+FROM clients c;
+```
+
+::right::
+
+<div class="ml-4">
+
+### Avec CTE
+```sql
+WITH stats_clients AS (
+    SELECT 
+        client_id,
+        COUNT(*) as nb_commandes,
+        SUM(montant) as total
+    FROM commandes
+    GROUP BY client_id
+)
+SELECT 
+    c.nom,
+    s.nb_commandes,
+    s.total
+FROM clients c
+JOIN stats_clients s 
+    ON c.id = s.client_id;
+```
+</div>
+---
+layout: two-cols-header
+---
+
+# Requêtes récursives
+
+::left::
+
+### Fonctionnement
+1. Requête d'ancrage (non récursive)
+2. Partie récursive
+3. UNION ALL entre les deux
+4. Condition d'arrêt
+
+### Applications
+- Structures hiérarchiques
+- Organigrammes
+- Catégories/sous-catégories
+- Graphes de relations
+
+::right::
+
+```sql
+WITH RECURSIVE employes_hierarchie AS (
+    -- Ancrage : managers principaux
+    SELECT 
+        id, nom, manager_id, 1 as niveau
+    FROM employes
+    WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    -- Partie récursive
+    SELECT 
+        e.id, 
+        e.nom, 
+        e.manager_id, 
+        h.niveau + 1
+    FROM employes e
+    JOIN employes_hierarchie h 
+        ON e.manager_id = h.id
+)
+SELECT * FROM employes_hierarchie
+ORDER BY niveau, nom;
+```
+
+---
+layout: two-cols-header
+---
+
+# Cas d'utilisation des CTEs récursives
+
+::left::
+
+### Navigation dans un arbre
+- Trouver tous les subordonnés
+- Trouver tous les supérieurs
+- Calculer la profondeur
+
+### Calculs itératifs
+- Suites numériques
+- Chemins dans un graphe
+- Décomposition de valeurs
+
+::right::
+
+```sql
+-- Trouver tous les subordonnés
+WITH RECURSIVE subordonnees AS (
+    SELECT id, nom
+    FROM employes
+    WHERE manager_id = 1  -- ID du manager
+
+    UNION ALL
+    
+    SELECT e.id, e.nom
+    FROM employes e
+    JOIN subordonnees s 
+        ON e.manager_id = s.id
+)
+SELECT * FROM subordonnees;
+```
+
+---
+layout: cover
+---
+
+# SQL - Optimisation
+## Performance et optimisation
+
+---
+layout: two-cols-header
+---
+
+# Pourquoi et quand indexer ?
+
+::left::
+
+### Objectifs de l'indexation
+- Accélérer les recherches
+- Optimiser les tris
+- Améliorer les jointures
+- Garantir l'unicité
+
+### Quand indexer ?
+- Colonnes de recherche fréquente
+- Clés étrangères
+- Colonnes de tri fréquent
+- Colonnes de jointure
+
+::right::
+
+### À éviter
+- Tables peu volumineuses
+- Colonnes rarement utilisées
+- Colonnes très variables
+- Colonnes fréquemment mises à jour
+
+```sql
+-- Index pertinent
+CREATE INDEX idx_recherche_email 
+ON utilisateurs(email)
+WHERE statut = 'actif';
+
+-- Index moins pertinent
+CREATE INDEX idx_date_creation
+ON logs(date_creation);  -- Trop de mises à jour
+```
+
+---
+layout: two-cols-header
+---
+
+# Types d'index
+
+::left::
+
+### Index simple
+```sql
+-- Sur une seule colonne
+CREATE INDEX idx_nom 
+ON employes(nom);
+```
+
+### Index composite
+```sql
+-- Sur plusieurs colonnes
+CREATE INDEX idx_nom_dept 
+ON employes(departement, nom);
+-- Ordre important !
+```
+
+::right::
+
+### Index partiel
+```sql
+-- Condition WHERE
+CREATE INDEX idx_commandes_importantes 
+ON commandes(date_commande) 
+WHERE montant > 1000;
+```
+
+### Index sur expression
+```sql
+-- Sur une expression
+CREATE INDEX idx_email_lower 
+ON utilisateurs(LOWER(email));
+```
+
+---
+layout: two-cols-header
+---
+
+# Optimisation des requêtes
+
+::left::
+
+### Bonnes pratiques
+- Éviter SELECT *
+- Limiter les résultats
+- Utiliser des index existants
+- Optimiser les jointures
+
+### Points d'attention
+- Cardinalité des jointures
+- Ordre des jointures
+- Conditions du WHERE
+- Taille des résultats intermédiaires
+
+::right::
+
+```sql
+-- Avant optimisation
+SELECT *
+FROM commandes c
+JOIN clients cl ON c.client_id = cl.id
+WHERE LOWER(cl.email) LIKE '%@gmail.com'
+AND c.date_commande >= '2023-01-01';
+
+-- Après optimisation
+SELECT 
+    c.id, c.date_commande, 
+    cl.nom, cl.email
+FROM clients cl
+JOIN commandes c ON c.client_id = cl.id
+WHERE cl.email LIKE '%@gmail.com'
+AND c.date_commande >= '2023-01-01';
+```
+
+---
+layout: two-cols-header
+---
+
+# Bonnes pratiques de performance
+
+::left::
+
+### 1. Structure et conception
+- Normalisation appropriée
+- Types de données adaptés
+- Contraintes pertinentes
+- Index stratégiques
+
+### 2. Écriture des requêtes
+- Utiliser les index existants
+- Éviter les fonctions sur les colonnes indexées
+- Préférer EXISTS à IN pour les sous-requêtes
+- Limiter le nombre de jointures
+
+::right::
+
+### 3. Maintenance
+- Mettre à jour les statistiques
+- Reconstruire les index fragmentés
+- Surveiller les requêtes lentes
+- Analyser les plans d'exécution
+
+```sql
+-- Exemple de bonne pratique
+SELECT c.nom, COUNT(o.id) as nb_commandes
+FROM clients c
+LEFT JOIN commandes o ON c.id = o.client_id
+    AND o.date_commande >= CURRENT_DATE - INTERVAL '30 days'
+GROUP BY c.id, c.nom
+HAVING COUNT(o.id) > 0;
+```
+
+
+---
+layout: cover
+---
+
+# SQL - ORM(Object-Relational Mapping)
+## Intégration avec SQLAlchemy
+
+---
+layout: two-cols-header
+---
+
+# Introduction à SQLAlchemy
+
+::left::
+
+### Qu'est-ce que SQLAlchemy ?
+- ORM Python le plus populaire
+- Abstraction de la base de données
+- Mapping objet-relationnel
+- API complète et flexible
+
+### Architecture
+- Engine (connexion)
+- Session (transactions)
+- Model (définition des tables)
+- Query API (requêtes)
+
+::right::
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+# Connexion
+engine = create_engine('postgresql://user:pwd@localhost/db')
+
+# Session
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Base pour les modèles
+Base = declarative_base()
+```
+
+---
+layout: two-cols-header
+---
+
+# Mapping objet-relationnel
+
+::left::
+
+### Définition des modèles
+```python
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    email = Column(String, unique=True)
+    orders = relationship("Order", back_populates="user")
+```
+
+::right::
+
+### Relations
+```python
+class Order(Base):
+    __tablename__ = 'orders'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    amount = Column(Integer)
+    user = relationship("User", 
+                       back_populates="orders")
+```
+
+---
+layout: two-cols-header
+---
+
+# Requêtes avec SQLAlchemy
+
+::left::
+
+### Opérations CRUD
+```python
+# Create
+new_user = User(name="Alice", email="alice@email.com")
+session.add(new_user)
+session.commit()
+
+# Read
+user = session.query(User).filter_by(name="Alice").first()
+
+# Update
+user.email = "newemail@email.com"
+session.commit()
+
+# Delete
+session.delete(user)
+session.commit()
+```
+
+::right::
+
+### Requêtes complexes
+```python
+# Jointures
+results = session.query(User, Order)\
+    .join(Order)\
+    .filter(Order.amount > 100)\
+    .all()
+
+# Agrégations
+from sqlalchemy import func
+avg_amount = session.query(
+    func.avg(Order.amount))\
+    .scalar()
+
+# Window Functions
+from sqlalchemy import over
+rank = func.rank()\
+    .over(order_by=Order.amount.desc())
+```
+
+---
+layout: two-cols-header
+---
+
+# Avantages de l'ORM
+
+::left::
+
+### Bénéfices
+- Code plus pythonique
+- Abstraction de la base
+- Portabilité
+- Sécurité automatique
+
+### Limitations
+- Performance vs SQL pur
+- Courbe d'apprentissage
+- Complexité pour requêtes avancées
+
+::right::
+
+### Bonnes pratiques
+```python
+# Sessions contextuelles
+with Session() as session:
+    user = session.query(User).get(1)
+    user.name = "New Name"
+    session.commit()
+
+# Chargement efficace
+users = session.query(User)\
+    .options(joinedload(User.orders))\
+    .filter(User.active == True)\
+    .all()
+
+# Pagination
+page = session.query(User)\
+    .order_by(User.id)\
+    .limit(20)\
+    .offset(40)\
+    .all()
+```
 
 ---
 layout: two-cols-header
@@ -1323,6 +2136,7 @@ layout: two-cols-header
 
 ---
 layout: cover
+background: './images/pont.png'
 ---
 
 # Neo4j
@@ -1333,6 +2147,10 @@ layout: default
 ---
 
 # Qu'est-ce que Neo4j ?
+
+<!-- ![alt text](image.png) -->
+<img src="./images/pont.png"/>
+
 
 ### Caractéristiques principales
 - Base de données orientée graphe
