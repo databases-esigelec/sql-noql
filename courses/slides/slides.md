@@ -145,6 +145,13 @@ CREATE TABLE Commandes (
 
 
 ---
+layout: iframe
+
+# la source de la page Web
+url: https://app.wooclap.com/IERLNE/questionnaires/678e060592af6046a9581f39
+---
+
+---
 layout: two-cols-header
 ---
 
@@ -185,6 +192,12 @@ layout: two-cols-header
 - Requêtes plus complexes
 </div>
 
+---
+layout: iframe
+
+# la source de la page Web
+url: https://app.wooclap.com/IERLNE/questionnaires/67884081762064bf4606a9cf
+---
 
 ---
 layout: two-cols-header
@@ -488,6 +501,12 @@ WHERE salaire > ALL (
     GROUP BY departement_id
 );
 ```
+---
+layout: iframe
+
+# la source de la page Web
+url: https://app.wooclap.com/IERLNE/questionnaires/6788436dff0260760abcffc1
+---
 
 ---
 layout: cover
