@@ -11,7 +11,32 @@ title: Bases de données SQL et NoSQL
 ---
 
 # Bases de données SQL et NoSQL
-## Introduction et concepts fondamentaux
+
+
+---
+layout: two-cols-header
+---
+
+
+# Qui suis-je? 
+
+- 🧑🏾 **Nom**: Brice FOTZO
+- 🌍 **Origine**: Bafoussam, Cameroun 
+- 🎓 **Formation**: Ingénieur Généraliste(BDTN) - ESIGELEC Rouen
+
+> Parcours Data & AI
+- Analytics Engineer - **Apprenti** @ Renault
+- Data Enigneer - CDI @ Starclay
+- Tech Lead Data - CDI @ HephIA
+- Intervenant - CDD @ ESIGELEC Rouen
+- Founder @ CVSurMesure
+
+> Engagements Communautaires
+- Data Engineer - **Volunteer** @ Validalab(DFG)
+- MUG Leader Paris - **Volunteer** @ MongoDB
+- Créateur de contenu @ LinkedIn, Medium
+- Créateur de Serial Techos
+
 
 ---
 layout: default
@@ -19,35 +44,104 @@ layout: default
 
 # Plan du module
 
-- **Cours Magistral** (1 journée - 8h)
-  - SQL Avancé - 3h
-    - Rappel des fondamentaux - 30 min
-      -  2 exercices + 1 mini-challenge - 20 min
-    - Optimisation(indexation, analyse) - 45 min
-      - 1 exercice + 1 mini-challenge - 15 min
-    - Pause - 10 min
-    - Requêtes complexes(Fenetrage, CTEs, Joins) - 45 min
-      - 2 exercices + 1 mini-challenge - 15 min
-    - ORM python(SQLAlchemy)
-  - NoSQL - 5h
-    - Introduction et concepts - 1h
-      - 1 exercice + 1 mini-challenge - 10 min
-    - MongoDB - 1h30
-      - 2 exercice + 1 mini-challenge - 15 min
-    - Neo4j - 1h30
-      - 2 exercice + 1 mini-challenge - 15 min
+**Cours Magistral** (1 journée - 8h)
+ 
+- **SQL Avancé** - 3h30
+  - Fondamentaux
+  - Requêtes avancées - CASE WHEN, Sous-requêtes
+  - Analyse de données - Window Functions, Agrégations
+  - CTEs et Récursion
+  - Optimisation 
+  - SQLAlchemy 
 
+- **NoSQL** - 4h30
+  - Introduction et concepts - Caractéristiques, choix, use cases
+  - MongoDB - Pourquoi et comment, CRUD
+  - Neo4j - Pourquoi et comment, CRUD
 
-- **TD** (1/2 journée - 4h)
-  - Travaux dirigés SQL - 1h - 2 exercices guidés
-  - Travaux dirigés NoSQL - 3h - 4 à 6 exercices guidés
+---
+layout: two-cols-header
+---
+
+# Plan du module
+
+::left::
+**TD** (1/2 journée - 4h)
+  - Travaux dirigés SQL - 2h
+  - Travaux dirigés NoSQL - 2h
   
-- **TP** (2 journées - 16h)
+**TP** (2 journées - 16h)
   - Projet fil rouge - PostgreSQL/MongoDB/Neo4j
-  - Cas réels d'utilisation
 
-- **Évaluation**
-  - 1 contrôle
+**Évaluations**
+  - 1 Devoir surveillé 
+  - TP notés et projet fil rouge 
+
+::right::
+
+**Ressources principales**
+
+- Support de cours - Slides
+- Exercices de cours - GitHub
+- Challenges par équipes - Wooclap
+---
+layout: cover
+background: https://source.unsplash.com/collection/94734566/1920x1080
+---
+# Projet fil rouge 
+Simulateur de Carrière Tech
+
+**Vue d'ensemble**
+Un jeu de simulation où les joueurs :
+- Font des choix de carrière dans la tech
+- Reçoivent des opportunités par email
+- Développent leur réseau professionnel
+- Participent à des événements tech
+
+**Mécaniques de jeu**
+- **Points de départ** : Choix entre Emploi, Formation, Freelance ou Recherche
+- **Gameplay par email** : Réponses aux opportunités, invitations, connexions
+- **Évolution de carrière** : Progression basée sur les choix et l'expérience
+- **Construction du réseau** : Connexions avec des NPCs, participation aux événements
+
+---
+layout: two-cols-header
+background: https://source.unsplash.com/collection/94734566/1920x1080
+---
+
+## Infrastructure Technique
+
+::left::
+### Architecture Multi-Bases
+1. **PostgreSQL**
+   - Stockage des données principales
+   - Entités et relations entre elles
+
+2. **Neo4j**
+   - Graphe du réseau social
+   - Moteur de recommandation
+   - Matching basé sur les intérêts
+
+3. **MongoDB**
+   - Boîtes mail des joueurs
+   - Progression de carrière
+   - Participation aux événements
+
+::right::
+
+### Entités Clés
+- **Topics** : Domaines techniques (Web Dev, Data Science...)
+- **Skills** : Compétences spécifiques (Python, AWS...)
+- **Events** : Conférences, Meetups, Hackathons
+- **Organizations** : Entreprises, Labos de recherche, Universités
+- **Opportunities** : Emplois, Formations, Missions Freelance
+- **System Persons** : NPCs avec rôles et backgrounds
+
+---
+layout: iframe  
+url: https://my-path-rust.vercel.app
+---
+
 
 ---
 layout: two-cols-header
@@ -61,8 +155,8 @@ layout: two-cols-header
 
 - Maîtriser les différences entre SQL et NoSQL
 - Choisir la bonne technologie selon le contexte
-- Concevoir des bases de données optimisées
-- Développer des compétences pratiques
+- Savoir manipuler PostgreSQL, MongoDB et Neo4j
+- Implémenter des méthodes de CRUD dans un projet Python
 
 ::right::
 
@@ -501,12 +595,7 @@ WHERE salaire > ALL (
     GROUP BY departement_id
 );
 ```
----
-layout: iframe
 
-# la source de la page Web
-url: https://app.wooclap.com/IERLNE/questionnaires/6788436dff0260760abcffc1
----
 
 ---
 layout: cover
@@ -706,7 +795,12 @@ FROM ventes;
 ```
 
 
+---
+layout: iframe
 
+# la source de la page Web
+url: https://app.wooclap.com/IERLNE/questionnaires/6788436dff0260760abcffc1
+---
 ---
 layout: cover
 ---
@@ -881,6 +975,10 @@ WITH RECURSIVE subordonnees AS (
 )
 SELECT * FROM subordonnees;
 ```
+---
+layout: iframe
+url: https://app.wooclap.com/IERLNE/questionnaires/678ecfee958d7b2255f4daa5
+---
 
 ---
 layout: cover
@@ -1046,6 +1144,10 @@ GROUP BY c.id, c.nom
 HAVING COUNT(o.id) > 0;
 ```
 
+---
+layout: iframe
+url: https://app.wooclap.com/IERLNE/questionnaires/67884f43762064bf460ad9c3
+---
 
 ---
 layout: cover
@@ -1543,6 +1645,11 @@ graph TB
 ```
 
 ---
+layout: iframe
+url: https://app.wooclap.com/IERLNE/questionnaires/678858c2ab98a0451c9acab1
+---
+
+---
 layout: cover
 ---
 
@@ -1842,6 +1949,10 @@ layout: two-cols-header
 - Arrays non bornés
 - Références en cascade
 
+---
+layout: iframe
+url: https://app.wooclap.com/IERLNE/questionnaires/6788bc78c2c45244acd9d297
+---
 ---
 layout: cover
 # background: './images/pont.png'
@@ -2155,10 +2266,15 @@ MATCH chemin = (c:Compte)-[:TRANSFERT*3..5]->(c)
 WHERE ALL(r IN relationships(chemin) WHERE r.montant > 10000)
 RETURN chemin
 ```
+---
+layout: iframe
+url: https://app.wooclap.com/IERLNE/questionnaires/6788bec9c2c45244acdce4c2
+---
 
 ---
 layout: cover
 ---
+
 
 # Travaux Dirigés
 ## SQL et NoSQL en pratique
