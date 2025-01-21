@@ -91,6 +91,50 @@ vendeurs(id, nom)
 3. Pour chaque vente, montrez la différence avec la vente précédente du même vendeur
 
 <details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE vendeurs (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100)
+);
+
+CREATE TABLE ventes (
+    id SERIAL PRIMARY KEY,
+    vendeur_id INTEGER REFERENCES vendeurs(id),
+    montant DECIMAL(10,2),
+    date_vente DATE
+);
+
+-- Insertion des données de test pour les vendeurs
+INSERT INTO vendeurs (nom) VALUES
+    ('Marie Dupont'),
+    ('Jean Martin'),
+    ('Sophie Bernard'),
+    ('Lucas Petit');
+
+-- Insertion des données de test pour les ventes
+INSERT INTO ventes (vendeur_id, montant, date_vente) VALUES
+    (1, 1500.00, '2024-01-15'),
+    (2, 2300.00, '2024-01-15'),
+    (3, 1800.00, '2024-01-15'),
+    (1, 2100.00, '2024-01-16'),
+    (2, 1900.00, '2024-01-16'),
+    (3, 2500.00, '2024-01-16'),
+    (4, 1700.00, '2024-01-16'),
+    (1, 2800.00, '2024-01-17'),
+    (2, 2200.00, '2024-01-17'),
+    (3, 1950.00, '2024-01-17'),
+    (4, 2400.00, '2024-01-17'),
+    (1, 1600.00, '2024-01-18'),
+    (2, 2700.00, '2024-01-18'),
+    (3, 2100.00, '2024-01-18'),
+    (4, 1900.00, '2024-01-18');
+```
+</details>
+
+<details>
 <summary>Solutions</summary>
 
 ```sql
