@@ -229,6 +229,51 @@ categories(id, nom, parent_id)
 3. Listez toutes les catégories et leurs sous-catégories
 
 <details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE employes (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    manager_id INTEGER REFERENCES employes(id)
+);
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    parent_id INTEGER REFERENCES categories(id)
+);
+
+-- Insertion des données pour les employés
+INSERT INTO employes (id, nom, manager_id) VALUES
+    (1, 'Alice Martin', NULL),                -- PDG
+    (2, 'Bob Dupont', 1),                     -- Directeur sous Alice
+    (3, 'Claire Durant', 1),                  -- Directrice sous Alice
+    (4, 'David Bernard', 2),                  -- Manager sous Bob
+    (5, 'Emma Petit', 2),                     -- Manager sous Bob
+    (6, 'François Leroy', 3),                 -- Manager sous Claire
+    (7, 'Gabriel Moreau', 4),                 -- Employé sous David
+    (8, 'Hélène Dubois', 4),                 -- Employé sous David
+    (9, 'Ivan Rousseau', 5),                 -- Employé sous Emma
+    (10, 'Julie Lambert', 6);                -- Employé sous François
+
+-- Insertion des données pour les catégories
+INSERT INTO categories (id, nom, parent_id) VALUES
+    (1, 'Électronique', NULL),
+    (2, 'Ordinateurs', 1),
+    (3, 'Smartphones', 1),
+    (4, 'Laptops', 2),
+    (5, 'Desktops', 2),
+    (6, 'Android', 3),
+    (7, 'iOS', 3),
+    (8, 'Ultrabooks', 4),
+    (9, 'Gaming', 4);
+
+```
+</details>
+
+<details>
 <summary>Solutions</summary>
 
 ```sql
