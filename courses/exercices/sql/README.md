@@ -15,8 +15,43 @@ Nous avons une base de données Postgres gérant une bibliothèque. Les tables p
 2. Trouvez tous les livres publiés avant 1900, triés par année de publication
 
 <details>
-<summary>Solutions</summary>
+<summary>Données</summary>
+    
+```sql
+CREATE TABLE auteurs (
+    id_auteur INT PRIMARY KEY,
+    nom VARCHAR(50),
+    prenom VARCHAR(50),
+    date_naissance DATE
+);
 
+CREATE TABLE livres (
+    id_livre INT PRIMARY KEY,
+    titre VARCHAR(100),
+    id_auteur INT,
+    annee_publication INT,
+    genre VARCHAR(50),
+    FOREIGN KEY (id_auteur) REFERENCES auteurs(id_auteur)
+);
+
+INSERT INTO auteurs (id_auteur, nom, prenom, date_naissance) VALUES
+(1, 'Hugo', 'Victor', '1802-02-26'),
+(2, 'Camus', 'Albert', '1913-11-07'),
+(3, 'Rowling', 'J.K.', '1965-07-31');
+
+INSERT INTO livres (id_livre, titre, id_auteur, annee_publication, genre) VALUES
+(1, 'Les Misérables', 1, 1862, 'Roman'),
+(2, 'L''Étranger', 2, 1942, 'Roman'),
+(3, 'Harry Potter à l''école des sorciers', 3, 1997, 'Fantasy'),
+(4, 'Notre-Dame de Paris', 1, 1831, 'Roman'),
+(5, 'La Peste', 2, 1947, 'Roman');
+```
+</details>
+
+<details>
+<summary>Solutions</summary>
+    
+```sql
 -- 1. Écrivez une requête SQL pour obtenir la liste de tous les livres avec le nom et prénom de leurs auteurs.
 
 SELECT l.titre, a.nom, a.prenom
@@ -29,7 +64,7 @@ SELECT titre, annee_publication
 FROM livres
 WHERE annee_publication < 1900
 ORDER BY annee_publication;
-
+```
 </details>
 
 ## Exercice 2 : Requêtes avancées
@@ -44,19 +79,69 @@ departements(id, nom, budget)
 1. Listez les employés dont le salaire est supérieur à la moyenne de leur département
 2. Classez les départements par nombre d'employés gagnant plus de 50000
 3. Pour chaque employé, affichez une classification ('Junior', 'Senior') basée sur le salaire
+<details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE departements (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    budget DECIMAL(12,2)
+);
+
+CREATE TABLE employes (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    salaire DECIMAL(10,2),
+    departement_id INTEGER REFERENCES departements(id)
+);
+
+-- Insertion des données pour les départements
+INSERT INTO departements (nom, budget) VALUES
+    ('R&D', 1000000.00),
+    ('Marketing', 800000.00),
+    ('Ventes', 900000.00),
+    ('RH', 400000.00);
+
+-- Insertion des données pour les employés
+INSERT INTO employes (nom, salaire, departement_id) VALUES
+    ('Alice Martin', 65000.00, 1),    -- R&D
+    ('Bob Dupont', 45000.00, 1),      -- R&D
+    ('Claire Durant', 72000.00, 1),   -- R&D
+    ('David Bernard', 58000.00, 2),   -- Marketing
+    ('Emma Petit', 48000.00, 2),      -- Marketing
+    ('François Leroy', 52000.00, 2),  -- Marketing
+    ('Gabriel Moreau', 63000.00, 3),  -- Ventes
+    ('Hélène Dubois', 55000.00, 3),   -- Ventes
+    ('Ivan Rousseau', 42000.00, 3),   -- Ventes
+    ('Julie Lambert', 47000.00, 4),   -- RH
+    ('Kevin Martin', 38000.00, 4),    -- RH
+    ('Laura Simon', 44000.00, 4);     -- RH
+```
+</details>
 
 <details>
 <summary>Solutions</summary>
 
 ```sql
 -- 1. Salaire > moyenne département
-SELECT e.nom, e.salaire
+SELECT 
+    e.nom as employe,
+    e.salaire,
+    d.nom as departement,
+    ROUND(dept_avg.moyenne_salaire, 2) as moyenne_departement
 FROM employes e
-WHERE e.salaire > (
-    SELECT AVG(salaire)
+JOIN departements d ON e.departement_id = d.id
+JOIN (
+    SELECT 
+        departement_id,
+        AVG(salaire) as moyenne_salaire
     FROM employes
-    WHERE departement_id = e.departement_id
-);
+    GROUP BY departement_id
+) dept_avg ON e.departement_id = dept_avg.departement_id
+WHERE e.salaire > dept_avg.moyenne_salaire
+ORDER BY d.nom, e.salaire DESC;
 
 -- 2. Classement départements
 SELECT d.nom, COUNT(*) as nb_emp
@@ -89,6 +174,50 @@ vendeurs(id, nom)
 1. Classez les vendeurs par leur chiffre d'affaires total
 2. Calculez la moyenne mobile sur 3 jours des ventes
 3. Pour chaque vente, montrez la différence avec la vente précédente du même vendeur
+
+<details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE vendeurs (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100)
+);
+
+CREATE TABLE ventes (
+    id SERIAL PRIMARY KEY,
+    vendeur_id INTEGER REFERENCES vendeurs(id),
+    montant DECIMAL(10,2),
+    date_vente DATE
+);
+
+-- Insertion des données de test pour les vendeurs
+INSERT INTO vendeurs (nom) VALUES
+    ('Marie Dupont'),
+    ('Jean Martin'),
+    ('Sophie Bernard'),
+    ('Lucas Petit');
+
+-- Insertion des données de test pour les ventes
+INSERT INTO ventes (vendeur_id, montant, date_vente) VALUES
+    (1, 1500.00, '2024-01-15'),
+    (2, 2300.00, '2024-01-15'),
+    (3, 1800.00, '2024-01-15'),
+    (1, 2100.00, '2024-01-16'),
+    (2, 1900.00, '2024-01-16'),
+    (3, 2500.00, '2024-01-16'),
+    (4, 1700.00, '2024-01-16'),
+    (1, 2800.00, '2024-01-17'),
+    (2, 2200.00, '2024-01-17'),
+    (3, 1950.00, '2024-01-17'),
+    (4, 2400.00, '2024-01-17'),
+    (1, 1600.00, '2024-01-18'),
+    (2, 2700.00, '2024-01-18'),
+    (3, 2100.00, '2024-01-18'),
+    (4, 1900.00, '2024-01-18');
+```
+</details>
 
 <details>
 <summary>Solutions</summary>
@@ -138,6 +267,51 @@ categories(id, nom, parent_id)
 1. Affichez l'arbre hiérarchique des employés avec leur niveau
 2. Trouvez tous les subordonnés d'un manager donné (id = 1)
 3. Listez toutes les catégories et leurs sous-catégories
+
+<details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE employes (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    manager_id INTEGER REFERENCES employes(id)
+);
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    parent_id INTEGER REFERENCES categories(id)
+);
+
+-- Insertion des données pour les employés
+INSERT INTO employes (id, nom, manager_id) VALUES
+    (1, 'Alice Martin', NULL),                -- PDG
+    (2, 'Bob Dupont', 1),                     -- Directeur sous Alice
+    (3, 'Claire Durant', 1),                  -- Directrice sous Alice
+    (4, 'David Bernard', 2),                  -- Manager sous Bob
+    (5, 'Emma Petit', 2),                     -- Manager sous Bob
+    (6, 'François Leroy', 3),                 -- Manager sous Claire
+    (7, 'Gabriel Moreau', 4),                 -- Employé sous David
+    (8, 'Hélène Dubois', 4),                 -- Employé sous David
+    (9, 'Ivan Rousseau', 5),                 -- Employé sous Emma
+    (10, 'Julie Lambert', 6);                -- Employé sous François
+
+-- Insertion des données pour les catégories
+INSERT INTO categories (id, nom, parent_id) VALUES
+    (1, 'Électronique', NULL),
+    (2, 'Ordinateurs', 1),
+    (3, 'Smartphones', 1),
+    (4, 'Laptops', 2),
+    (5, 'Desktops', 2),
+    (6, 'Android', 3),
+    (7, 'iOS', 3),
+    (8, 'Ultrabooks', 4),
+    (9, 'Gaming', 4);
+
+```
+</details>
 
 <details>
 <summary>Solutions</summary>
@@ -192,6 +366,55 @@ JOIN commandes c ON u.id = c.user_id
 WHERE LOWER(u.ville) = 'paris'
 AND c.date >= '2024-01-01';
 ```
+
+<details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE utilisateurs (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    email VARCHAR(255),
+    ville VARCHAR(100)
+);
+
+CREATE TABLE commandes (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES utilisateurs(id),
+    montant DECIMAL(10,2),
+    date DATE
+);
+
+-- Insertion de données de test pour les utilisateurs
+INSERT INTO utilisateurs (nom, email, ville) VALUES
+    ('Jean Dupont', 'jean.dupont@mail.com', 'Paris'),
+    ('Marie Martin', 'marie.martin@mail.com', 'Lyon'),
+    ('Pierre Durant', 'pierre.durant@mail.com', 'Paris'),
+    ('Sophie Bernard', 'sophie.bernard@mail.com', 'Marseille'),
+    ('Lucas Petit', 'lucas.petit@mail.com', 'Paris'),
+    ('Emma Leroy', 'emma.leroy@mail.com', 'Lyon'),
+    ('Thomas Roux', 'thomas.roux@mail.com', 'Paris'),
+    ('Julie Moreau', 'julie.moreau@mail.com', 'Marseille'),
+    ('Nicolas Girard', 'nicolas.girard@mail.com', 'Paris'),
+    ('Clara Simon', 'clara.simon@mail.com', 'Lyon');
+
+-- Insertion de données de test pour les commandes
+INSERT INTO commandes (user_id, montant, date) VALUES
+    (1, 150.00, '2024-01-05'),
+    (1, 200.00, '2024-01-15'),
+    (2, 75.50, '2023-12-28'),
+    (3, 320.00, '2024-01-10'),
+    (3, 180.00, '2024-01-20'),
+    (4, 95.00, '2024-01-08'),
+    (5, 250.00, '2024-01-12'),
+    (6, 130.00, '2023-12-30'),
+    (7, 420.00, '2024-01-18'),
+    (8, 160.00, '2024-01-07'),
+    (9, 290.00, '2024-01-14'),
+    (10, 110.00, '2023-12-25');
+```
+</details>
 
 <details>
 <summary>Solutions</summary>
