@@ -363,6 +363,55 @@ AND c.date >= '2024-01-01';
 ```
 
 <details>
+<summary>Données</summary>
+
+```sql
+-- Création des tables
+CREATE TABLE utilisateurs (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    email VARCHAR(255),
+    ville VARCHAR(100)
+);
+
+CREATE TABLE commandes (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES utilisateurs(id),
+    montant DECIMAL(10,2),
+    date DATE
+);
+
+-- Insertion de données de test pour les utilisateurs
+INSERT INTO utilisateurs (nom, email, ville) VALUES
+    ('Jean Dupont', 'jean.dupont@mail.com', 'Paris'),
+    ('Marie Martin', 'marie.martin@mail.com', 'Lyon'),
+    ('Pierre Durant', 'pierre.durant@mail.com', 'Paris'),
+    ('Sophie Bernard', 'sophie.bernard@mail.com', 'Marseille'),
+    ('Lucas Petit', 'lucas.petit@mail.com', 'Paris'),
+    ('Emma Leroy', 'emma.leroy@mail.com', 'Lyon'),
+    ('Thomas Roux', 'thomas.roux@mail.com', 'Paris'),
+    ('Julie Moreau', 'julie.moreau@mail.com', 'Marseille'),
+    ('Nicolas Girard', 'nicolas.girard@mail.com', 'Paris'),
+    ('Clara Simon', 'clara.simon@mail.com', 'Lyon');
+
+-- Insertion de données de test pour les commandes
+INSERT INTO commandes (user_id, montant, date) VALUES
+    (1, 150.00, '2024-01-05'),
+    (1, 200.00, '2024-01-15'),
+    (2, 75.50, '2023-12-28'),
+    (3, 320.00, '2024-01-10'),
+    (3, 180.00, '2024-01-20'),
+    (4, 95.00, '2024-01-08'),
+    (5, 250.00, '2024-01-12'),
+    (6, 130.00, '2023-12-30'),
+    (7, 420.00, '2024-01-18'),
+    (8, 160.00, '2024-01-07'),
+    (9, 290.00, '2024-01-14'),
+    (10, 110.00, '2023-12-25');
+```
+</details>
+
+<details>
 <summary>Solutions</summary>
 
 ```sql
