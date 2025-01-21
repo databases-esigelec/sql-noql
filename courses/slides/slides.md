@@ -151,13 +151,21 @@ layout: two-cols-header
 
 ::left::
 
-## Notions
+## Objectifs
+- **Compétences visées**: 
+   - :black_square_button: Maîtriser les différences entre SQL et NoSQL
+   - :black_square_button: Choisir les BDD adaptées à un besoin
+   - :black_square_button: Manipuler des BDD SQL et NoSQL dans une application(via Python)
+   - :black_square_button: Intégrer en continue du code embarquant des manipluations de BDD
+   - :red_square: Déployer des bases de données
+   - :red_square: Déployer en continue des mises à jour de BDD
 
-- Maîtriser les différences entre SQL et NoSQL
-- Choisir la bonne technologie selon le contexte
-- Savoir manipuler PostgreSQL, MongoDB et Neo4j
-- Implémenter des méthodes de CRUD dans un projet Python
-
+- **Technologies et outils**:
+   - :black_square_button: BDD: `Postgres`, `MongoDB`, `Neo4j`
+   - :black_square_button: Virtualization: `Docker`
+   - :black_square_button: Code: `Python`, `Github Actions`
+   - :red_square: Cloud: `GCP(Compute engine, Network, Cloud Run)`
+   - :red_square: IaC: `Terraform`, `Ansible`
 ::right::
 
 ```mermaid
