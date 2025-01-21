@@ -83,45 +83,41 @@ departements(id, nom, budget)
 <summary>Données</summary>
 
 ```sql
--- Création de la table employés
-
-CREATE TABLE employes (
-    id INT PRIMARY KEY,
+-- Création des tables
+CREATE TABLE departements (
+    id SERIAL PRIMARY KEY,
     nom VARCHAR(100),
-    departement VARCHAR(50),
-    salaire DECIMAL(10,2)
+    budget DECIMAL(12,2)
 );
 
--- Insertion de données représentatives
+CREATE TABLE employes (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    salaire DECIMAL(10,2),
+    departement_id INTEGER REFERENCES departements(id)
+);
 
-INSERT INTO employes (id, nom, departement, salaire) VALUES
+-- Insertion des données pour les départements
+INSERT INTO departements (nom, budget) VALUES
+    ('R&D', 1000000.00),
+    ('Marketing', 800000.00),
+    ('Ventes', 900000.00),
+    ('RH', 400000.00);
 
--- Département IT
-
-(1, 'Martin Philippe', 'IT', 65000.00),
-(2, 'Dubois Marie', 'IT', 72000.00),
-(3, 'Lefebvre Thomas', 'IT', 65000.00),
-(4, 'Roux Julie', 'IT', 85000.00),
-
--- Département Marketing
-
-(5, 'Bernard Sophie', 'Marketing', 52000.00),
-(6, 'Petit Lucas', 'Marketing', 48000.00),
-(7, 'Richard Emma', 'Marketing', 61000.00),
-(8, 'Moreau Antoine', 'Marketing', 55000.00),
-
--- Département Finance
-
-(9, 'Laurent Alice', 'Finance', 75000.00),
-(10, 'Simon Paul', 'Finance', 82000.00),
-(11, 'Michel Sarah', 'Finance', 78000.00),
-(12, 'Leroy David', 'Finance', 92000.00),
-
--- Département RH
-
-(13, 'Garcia Maria', 'RH', 45000.00),
-(14, 'Martinez Jean', 'RH', 51000.00),
-(15, 'Lopez Anna', 'RH', 48000.00);
+-- Insertion des données pour les employés
+INSERT INTO employes (nom, salaire, departement_id) VALUES
+    ('Alice Martin', 65000.00, 1),    -- R&D
+    ('Bob Dupont', 45000.00, 1),      -- R&D
+    ('Claire Durant', 72000.00, 1),   -- R&D
+    ('David Bernard', 58000.00, 2),   -- Marketing
+    ('Emma Petit', 48000.00, 2),      -- Marketing
+    ('François Leroy', 52000.00, 2),  -- Marketing
+    ('Gabriel Moreau', 63000.00, 3),  -- Ventes
+    ('Hélène Dubois', 55000.00, 3),   -- Ventes
+    ('Ivan Rousseau', 42000.00, 3),   -- Ventes
+    ('Julie Lambert', 47000.00, 4),   -- RH
+    ('Kevin Martin', 38000.00, 4),    -- RH
+    ('Laura Simon', 44000.00, 4);     -- RH
 ```
 </details>
 
