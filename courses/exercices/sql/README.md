@@ -126,13 +126,22 @@ INSERT INTO employes (nom, salaire, departement_id) VALUES
 
 ```sql
 -- 1. Salaire > moyenne département
-SELECT e.nom, e.salaire
+SELECT 
+    e.nom as employe,
+    e.salaire,
+    d.nom as departement,
+    ROUND(dept_avg.moyenne_salaire, 2) as moyenne_departement
 FROM employes e
-WHERE e.salaire > (
-    SELECT AVG(salaire)
+JOIN departements d ON e.departement_id = d.id
+JOIN (
+    SELECT 
+        departement_id,
+        AVG(salaire) as moyenne_salaire
     FROM employes
-    WHERE departement_id = e.departement_id
-);
+    GROUP BY departement_id
+) dept_avg ON e.departement_id = dept_avg.departement_id
+WHERE e.salaire > dept_avg.moyenne_salaire
+ORDER BY d.nom, e.salaire DESC;
 
 -- 2. Classement départements
 SELECT d.nom, COUNT(*) as nb_emp
