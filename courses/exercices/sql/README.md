@@ -45,7 +45,7 @@ departements(id, nom, budget)
 2. Classez les départements par nombre d'employés gagnant plus de 50000
 3. Pour chaque employé, affichez une classification ('Junior', 'Senior') basée sur le salaire
 <details>
-<summary>Solutions</summary>
+<summary>Données</summary>
 
 ```sql
 -- Création de la table employés
