@@ -15,7 +15,7 @@ Nous avons une base de données Postgres gérant une bibliothèque. Les tables p
 2. Trouvez tous les livres publiés avant 1900, triés par année de publication
 
 <details>
-<summary>Solutions</summary>
+<summary>Données</summary>
     
 ```sql
 CREATE TABLE auteurs (
