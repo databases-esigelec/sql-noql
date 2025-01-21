@@ -37,6 +37,12 @@ layout: two-cols-header
 - Créateur de contenu @ LinkedIn, Medium
 - Créateur de Serial Techos
 
+---
+layout: default
+---
+
+# Et vous?
+## Faisons connaissance
 
 ---
 layout: default
@@ -1980,6 +1986,19 @@ layout: two-cols-header
   <img src="/images/ponts-simple.png"/>
 </div>
 
+---
+layout: default
+# image: '/images/ponts.png'
+---
+# Le problème des 7 ponts
+
+
+
+
+
+<div class="mr-4 mt-6">
+  <img src="/images/image.png"/>
+</div>
 
 ---
 layout: default
