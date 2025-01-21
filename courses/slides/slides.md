@@ -151,34 +151,23 @@ layout: two-cols-header
 
 ::left::
 
-## Objectifs
 - **Compétences visées**: 
-   - :black_square_button: Maîtriser les différences entre SQL et NoSQL
-   - :black_square_button: Choisir les BDD adaptées à un besoin
-   - :black_square_button: Manipuler des BDD SQL et NoSQL dans une application(via Python)
-   - :black_square_button: Intégrer en continue du code embarquant des manipluations de BDD
-   - :red_square: Déployer des bases de données
-   - :red_square: Déployer en continue des mises à jour de BDD
+   - Maîtriser les différences entre SQL et NoSQL
+   - Choisir les BDD adaptées à un besoin
+   - Manipuler des BDD dans une app *Python*
+   - Intégrer en continue du code BDD
+   - *Déployer des bases de données*
+   - *Déployer en continue des mises à jour de BDD*
 
-- **Technologies et outils**:
-   - :black_square_button: BDD: `Postgres`, `MongoDB`, `Neo4j`
-   - :black_square_button: Virtualization: `Docker`
-   - :black_square_button: Code: `Python`, `Github Actions`
-   - :red_square: Cloud: `GCP(Compute engine, Network, Cloud Run)`
-   - :red_square: IaC: `Terraform`, `Ansible`
+
 ::right::
+- **Technologies et outils**:
+   - BDD: `Postgres`, `MongoDB`, `Neo4j`
+   - Virtualization: `Docker`
+   - Code: `Python`, `Github Actions`
+   - *Cloud: `GCP(Compute engine, Network)`*
+   - *IaC: `Terraform`, `Ansible`*
 
-```mermaid
-graph TD
-    A[Bases de données] --> B[SQL]
-    A --> C[NoSQL]
-    B --> D[Optimisation]
-    B --> E[Modélisation]
-    C --> F[Document]
-    C --> G[Clé-valeur]
-    C --> H[Colonnes]
-    C --> I[Graphes]
-```
 
 
 ---
