@@ -4,7 +4,7 @@
 
 1. Cloner le dépôt et se placer dans le bon répertoire :
 ```bash
-git clone <votre-depot>
+git clone https://github.com/databases-esigelec/sql-noq
 # ou
 git pull
 cd courses/exercices/tds
