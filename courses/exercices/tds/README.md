@@ -1,12 +1,13 @@
-# Guide rapide - TPs SQL/NoSQL
+# Guide rapide - TDs SQL/NoSQL
 
 ## TP PostgreSQL
 
 1. Cloner le dépôt et se placer dans le bon répertoire :
 ```bash
-git clone <votre-depot>
+git clone https://github.com/databases-esigelec/sql-noql
 # ou
-git pull
+git pull # si vous avez déjà cloné le dépôt
+# Naviguer dans le répertoire de TDs
 cd courses/exercices/tds
 ```
 
