@@ -2302,10 +2302,10 @@ layout: default
 # Organisation du TD
 
 ### Durée totale : 4 heures
-- PostgreSQL : 45 minutes
-- MongoDB : 85 minutes
+- PostgreSQL : 60 minutes
+- MongoDB : 80 minutes
 - Pause: 10 minutes
-- Neo4j : 85 minutes
+- Neo4j : 80 minutes
 - Révisions et questions : 15 minutes
 
 ### Objectifs

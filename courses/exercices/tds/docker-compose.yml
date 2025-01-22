@@ -1,0 +1,78 @@
+services:
+
+ # PostgreSQL
+  postgres:
+    image: postgres:latest
+    container_name: postgres-server
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: workshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+
+  # PostgreSQL Admin interface
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+      
+  mongo-server:
+    image: mongo:6.0.11
+    container_name: mongo-server
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-db:/assets/db
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo-server
+      ME_CONFIG_MONGODB_PORT: "27017"
+    depends_on:
+      - mongo-server
+
+  neo4j:
+    image: neo4j:4.4.15-enterprise
+    container_name: neo4j
+    ports:
+      - "7474:7474" # HTTP
+      - "7687:7687" # Bolt
+    volumes:
+      - ./neo4j/data:/data
+      - ./logs:/logs
+      - ./conf:/var/lib/neo4j/conf/
+    environment:
+      - NEO4J_AUTH=neo4j/password
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+
+  jupyter:
+    image: jupyter/datascience-notebook:latest
+    container_name: jupyter
+    ports:
+      - 8888:8888
+    volumes:
+      - .:/home/jovyan/work
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+volumes:
+  mongo-db:
+  postgres-data:
