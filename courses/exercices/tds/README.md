@@ -1,4 +1,4 @@
-# Guide rapide - TPs SQL/NoSQL
+# Guide rapide - TDs SQL/NoSQL
 
 ## TP PostgreSQL
 
