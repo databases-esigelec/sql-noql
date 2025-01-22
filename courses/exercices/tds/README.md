@@ -6,7 +6,8 @@
 ```bash
 git clone https://github.com/databases-esigelec/sql-noql
 # ou
-git pull
+git pull # si vous avez déjà cloné le dépôt
+# Naviguer dans le répertoire de TDs
 cd courses/exercices/tds
 ```
 
