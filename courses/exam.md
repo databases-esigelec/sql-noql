@@ -100,6 +100,7 @@ Consignes : Chaque question vaut 0.5 point. Il n'y a pas de points négatifs.
 ```
 
 a) Écrivez une requête pour trouver tous les articles avec le tag "nosql"
+
 b) Écrivez une requête pour ajouter un nouveau commentaire à un article spécifique
 
 2. Neo4j : Écrivez une requête Cypher pour :
