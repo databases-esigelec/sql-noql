@@ -28,8 +28,8 @@ layout: two-cols-header
 - Analytics Engineer - **Apprenti** @ Renault
 - Data Enigneer - CDI @ Starclay
 - Tech Lead Data - CDI @ HephIA
-- Intervenant - CDD @ ESIGELEC Rouen
-- Founder @ CVSurMesure
+- Tech Lead Data - CDI @ Servier
+- Intervenant - CDD @ ESIGELEC Rouen/Poitiers
 
 > Engagements Communautaires
 - Data Engineer - **Volunteer** @ Validalab(DFG)
@@ -50,9 +50,9 @@ layout: default
 
 # Plan du module
 
-**Cours Magistral** (1 journée - 8h)
+**Cours Magistral** 
  
-- **SQL Avancé** - 3h30
+- **SQL Avancé** 
   - Fondamentaux
   - Requêtes avancées - CASE WHEN, Sous-requêtes
   - Analyse de données - Window Functions, Agrégations
@@ -60,7 +60,7 @@ layout: default
   - Optimisation 
   - SQLAlchemy 
 
-- **NoSQL** - 4h30
+- **NoSQL** 
   - Introduction et concepts - Caractéristiques, choix, use cases
   - MongoDB - Pourquoi et comment, CRUD
   - Neo4j - Pourquoi et comment, CRUD
@@ -72,11 +72,11 @@ layout: two-cols-header
 # Plan du module
 
 ::left::
-**TD** (1/2 journée - 4h)
-  - Travaux dirigés SQL - 2h
-  - Travaux dirigés NoSQL - 2h
+**TD** 
+  - Travaux dirigés SQL 
+  - Travaux dirigés NoSQL 
   
-**TP** (2 journées - 16h)
+**TP** 
   - Projet fil rouge - PostgreSQL/MongoDB/Neo4j
 
 **Évaluations**
@@ -1951,6 +1951,268 @@ layout: two-cols-header
 - Documents trop profonds
 - Arrays non bornés
 - Références en cascade
+
+---
+layout: cover
+background: https://source.unsplash.com/collection/94734566/1920x1080
+---
+
+# MongoDB - Innovations 2025
+## Les dernières avancées qui transforment le NoSQL
+
+---
+layout: two-cols-header
+---
+
+# MongoDB 8.2 - Dernière version
+
+::left::
+
+<div class="mb-4">
+
+### 🚀 Version actuelle : **MongoDB 8.2**
+Sortie récente avec des fonctionnalités majeures
+
+</div>
+
+<div class="mb-4">
+
+### Nouveautés principales
+
+**Search & Vector Search Community** 🔍
+- Recherche full-text native
+- Vector Search dans Community Edition
+- Capacités IA pour tous
+
+**Hybrid Search** 🔀
+- Stage `$scoreFusion` pour recherche hybride
+- Combinaison texte + vecteurs
+- Pertinence améliorée
+
+</div>
+
+::right::
+
+<div class="mb-4">
+
+**Queryable Encryption amélioré** 🔐
+- Requêtes prefix, suffix, substring
+- Champs chiffrés interrogeables
+- Sécurité maximale sans compromis
+
+**Améliorations techniques** ⚡
+- `$currentDate` avec aggregate()
+- Métriques disk usage standardisées
+- Performance optimisée
+
+</div>
+
+<div class="mt-4 p-4 bg-green-900 rounded">
+
+💡 **MongoDB 8.2** apporte des fonctionnalités Atlas vers les déploiements self-managed
+
+</div>
+
+---
+layout: two-cols-header
+---
+
+# Queryable Encryption
+## Sécurité maximale des données
+
+::left::
+
+<div class="mb-4">
+
+### Chiffrement interrogeable
+- **At rest** : Données chiffrées au repos
+- **In transit** : Données chiffrées en transit
+- **In use** : Données utilisables chiffrées
+
+</div>
+
+<div>
+
+### Cas d'usage
+- Données médicales (HIPAA)
+- Informations bancaires (PCI-DSS)
+- Données personnelles (RGPD)
+- Secteur public et défense
+
+### Nouveauté 8.2
+```javascript
+// Recherche sur champs chiffrés
+db.patients.find({
+  nom: { $regex: "^Dup" }  // Prefix search
+})
+```
+
+</div>
+
+::right::
+
+<div class="flex items-center justify-center h-full">
+  <img src="/images/encryption.png" class="rounded-lg shadow-lg"/>
+</div>
+
+---
+layout: two-cols-header
+---
+
+# Vector Search & RAG
+## MongoDB et l'Intelligence Artificielle
+
+::left::
+
+<div class="mb-6">
+
+### Architecture RAG complète
+- **Vector Search** : Recherche sémantique
+- **Embeddings** : Vectorisation de données
+- **Reranking** : Optimisation des résultats
+- **LLM Integration** : Intégration modèles IA
+
+</div>
+
+<div>
+
+### Cas d'usage IA
+- Chatbots intelligents
+- Moteurs de recommandation
+- Recherche sémantique
+- Assistants virtuels
+- Analyse de documents
+
+</div>
+
+::right::
+
+<div class="flex items-center justify-center h-full">
+  <img src="/images/pipeline.png" class="rounded-lg shadow-lg"/>
+</div>
+
+---
+layout: default
+---
+
+# Vector Search en pratique
+
+### Créer un index vectoriel
+```javascript
+db.products.createSearchIndex({
+  name: "vector_index",
+  type: "vectorSearch",
+  definition: {
+    fields: [{
+      type: "vector",
+      path: "embedding",
+      numDimensions: 1536,
+      similarity: "cosine"
+    }]
+  }
+})
+```
+
+### Recherche vectorielle
+```javascript
+db.products.aggregate([
+  {
+    $vectorSearch: {
+      index: "vector_index",
+      path: "embedding",
+      queryVector: [0.123, 0.456, ...], // 1536 dimensions
+      numCandidates: 100,
+      limit: 10
+    }
+  },
+  {
+    $project: {
+      name: 1,
+      description: 1,
+      score: { $meta: "vectorSearchScore" }
+    }
+  }
+])
+```
+
+---
+layout: two-cols-header
+---
+
+# Agents IA avec MongoDB
+## Memory & State Management
+
+::left::
+
+<div class="mb-6">
+
+### Architecture Agent-Database
+**Cycle de l'Agent**
+1. **Perceive** : Perception de l'environnement
+2. **Decide** : Prise de décision
+3. **Act** : Action et exécution
+
+**Rôle de MongoDB**
+- Memory & State persistant
+- Contexte et historique
+- Contraintes et règles
+- Capture des résultats
+
+</div>
+
+::right::
+
+<div class="flex items-center justify-center h-full">
+  <img src="/images/agents.png" class="rounded-lg shadow-lg"/>
+</div>
+
+---
+layout: default
+---
+
+# Pourquoi MongoDB pour l'IA ?
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+### Avantages techniques
+- **Schéma flexible** : Adaptation rapide aux données IA
+- **Vector Search natif** : Pas besoin de base vectorielle séparée
+- **Performance** : Requêtes vectorielles rapides
+- **Scalabilité** : Gestion de millions de vecteurs
+- **Unified Platform** : Données + Vecteurs + Métadonnées
+
+</div>
+
+<div>
+
+### Use cases concrets
+1. **RAG (Retrieval-Augmented Generation)**
+   - Documentation technique
+   - Support client automatisé
+
+2. **Agents autonomes**
+   - Memory à long terme
+   - Context management
+
+3. **Recommandation**
+   - Similar items
+   - Personnalisation
+
+4. **Analyse sémantique**
+   - Clustering de documents
+   - Classification automatique
+
+</div>
+
+</div>
+
+<div class="mt-6 p-4 bg-blue-900 rounded">
+
+🔥 **MongoDB se positionne comme la base de données de référence pour l'IA moderne**
+
+</div>
 
 ---
 layout: iframe
